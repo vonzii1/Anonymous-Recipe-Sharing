@@ -1,7 +1,7 @@
 <h1 style="color:yellow;"># Anonymous Recipe Sharing Platform by H3101_Group4</h1>
 
 <h2 style="color:orange;"><em><strong>Overview</strong></em></h2>
-This project is a recipe sharing platform where users can browse posts, view images, and interact with posts by liking, disliking, commenting, adding to favorites, reporting them, craete post, view profile and notifications, and reply to chats.
+This project is a recipe sharing platform where users can browse posts, view images, and interact with posts by liking, disliking, commenting, adding to favorites, reporting them, create post, search recipes, view profile and notifications, and reply to chats.
 
 <h2 style="color:orange;"><em><strong>Project Structure</strong></em></h2>
 - **index.html**: The main HTML file that structures the webpage.
