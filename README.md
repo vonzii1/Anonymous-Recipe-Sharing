@@ -1,4 +1,4 @@
-<h1 style="color:yellow;"># Anonymous Recipe Sharing Platform by H3101_Group4</h1>
+# _**Anonymous Recipe Sharing Platform by H3101_Group4**_
 
 ## _**Overview**_
 This project is a recipe-sharing platform where users can:
