@@ -1,4 +1,4 @@
-<h1 style="color:yellow;"># Anonymous Recipe Sharing Platform by H3101_Group8</h1>
+<h1 style="color:yellow;"># Anonymous Recipe Sharing Platform by H3101_Group4</h1>
 
 <h2 style="color:orange;"><em><strong>Overview</strong></em></h2>
 This project is a recipe sharing platform where users can browse posts, view images, and interact with posts by liking, disliking, commenting, adding to favorites, and reporting them.
