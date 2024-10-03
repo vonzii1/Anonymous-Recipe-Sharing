@@ -25,22 +25,22 @@ html, body {
     align-items: center;
     height: 170px;
     background-color: #c2d3e6;
-    padding: 1px 50px; 
+    padding: 1px 50px;
     box-shadow: 0px 2px 4px rgba(247, 125, 125, 0.1);
     border-style: double;
     border-color: #333;
     border-radius: 8px;
     margin-bottom: 1px;
-    position: fixed; /* Fixes the navbar in place */
-    top: 0; /* Aligns it to the top of the page */
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    z-index: 1000; /* Ensures the navbar stays on top of other content */
+    z-index: 1000;
 }
 
-/* Additional rule to ensure content does not overlap with navbar */
+/* Ensure content doesn't overlap with navbar */
 .post-feed {
-    margin-top: 220px; /* Add margin to prevent overlap with fixed navbar */
+    margin-top: 220px;
 }
 
 /* Logo Section */
@@ -50,7 +50,7 @@ html, body {
 }
 
 .logo {
-    height: 325px; 
+    height: 325px;
     width: auto;   
 }
 
@@ -65,28 +65,28 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: none; /* No background */
+    background: none;
     border: none;
-    padding: 1px; 
-    font-size: 0.9rem; /* Smaller font size */
+    padding: 10px 15px;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
-    color: black; 
+    color: black;
 }
 
 .nav-buttons li button:hover {
-    color: #333; /* Darker hover color */
-    transform: scale(1.05); /* Slight scale effect */
+    color: #333;
+    transform: scale(1.05);
 }
 
 .nav-buttons li button i {
-    font-size: 1.3rem; /* Slightly smaller icon size */
+    font-size: 1.3rem;
     margin-bottom: 3px;
 }
 
 .nav-buttons li button span {
-    font-size: 0.8rem; /* Slightly smaller label font */
+    font-size: 0.8rem;
 }
 
 /* Search bar */
@@ -98,7 +98,7 @@ html, body {
     border-radius: 30px;
     padding: 8px 25px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    width: 500px; /* Increased width for the search bar */
+    width: 500px;
 }
 
 .search-container input {
@@ -120,7 +120,7 @@ html, body {
 /* Icons and Profile Section */
 .nav-icons {
     display: flex;
-    gap: 10px; /* Reduced gap to bring buttons closer */
+    gap: 10px;
     list-style: none;
 }
 
@@ -129,23 +129,23 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: none; /* No background */
+    background: none;
     border: none;
-    padding: 8px; /* Reduced padding */
+    padding: 8px;
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
-    color: black; /* Changed text color to black */
+    color: black;
 }
 
 .nav-icons li button:hover {
-    color: #333; /* Darker hover color */
+    color: #333;
     transform: scale(1.05);
 }
 
 .nav-icons li button i {
-    font-size: 1.3rem; /* Slightly smaller icon */
+    font-size: 1.3rem;
     margin-bottom: 3px;
 }
 
@@ -176,7 +176,7 @@ footer {
     font-size: 1rem;
 }
 
-/* Main Content - Placeholder for actual content */
+/* Main Content */
 .post-feed {
     min-height: 200px;
     background-color: #35407a;
@@ -195,7 +195,7 @@ footer {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Post Header: User Info */
+/* Post Header */
 .post-header {
     display: flex;
     align-items: center;
@@ -254,7 +254,7 @@ footer {
     border-radius: 5px;
 }
 
-/* Post Actions with labels under the icons */
+/* Post Actions */
 .post-actions {
     display: flex;
     justify-content: space-between;
@@ -265,12 +265,12 @@ footer {
 
 .likes-comments, .other-actions {
     display: flex;
-    gap: 30px; /* Space between action buttons */
+    gap: 30px;
 }
 
 .action-btn {
     display: flex;
-    flex-direction: column; /* Stack icon and label vertically */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: none;
@@ -284,24 +284,23 @@ footer {
 }
 
 .action-btn i {
-    font-size: 1.5rem; /* Larger icon size */
-    margin-bottom: 5px; /* Space between icon and label */
+    font-size: 1.5rem;
+    margin-bottom: 5px;
 }
 
 .action-btn .action-label {
-    font-size: 0.9rem; /* Smaller label below icon */
-    margin-top: 3px; /* Space between label and icon */
-    color: #777; /* Lighter color for labels */
+    font-size: 0.9rem;
+    margin-top: 3px;
+    color: #777;
 }
 
-/* Hover effect */
 .action-btn:hover {
     color: white;
     background-color: #007BFF;
     box-shadow: 0 3px 8px rgba(13, 77, 146, 0.3);
 }
 
-/* Adjusted button hover colors for individual actions */
+/* Adjust button hover colors */
 .action-btn.like-btn:hover {
     background-color: #28a745;
 }
@@ -330,67 +329,70 @@ footer {
     margin-top: 2px;
 }
 
-/* MEDIA QUERIES */
+/* MEDIA QUERIES FOR RESPONSIVENESS */
 
 /* Mobile Screen - Small Devices (Max width: 768px) */
 @media (max-width: 768px) {
-    /* Navbar adjustments */
+    /* Navbar */
     .navbar {
         flex-direction: column;
-        align-items: center;
         padding: 10px;
+        height: auto;
     }
 
+    /* Adjust logo */
     .logo {
-        height: 50px; /* Logo gets smaller on mobile devices */
+        height: 200px;
     }
 
-    .nav-buttons li button {
-        font-size: 0.7rem; /* Reduce font size for button labels */
-    }
-
-    .nav-buttons li button i {
-        font-size: 1.2rem; /* Reduce icon size */
-    }
-
+    /* Search bar */
     .search-container {
-        width: 100%; /* Make search bar full width on mobile */
-        margin-top: 10px;
+        width: 100%;
     }
 
-    /* Icons and Profile Section */
+    /* Nav buttons */
+    .nav-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .nav-icons {
-        gap: 10px; /* Reduce gap between icons */
-        justify-content: center; /* Center the profile, inbox, and chat icons */
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .profile-icon {
-        width: 40px; /* Smaller profile icon */
-        height: 40px;
-        font-size: 1rem; /* Smaller font size for profile initials */
-    }
-
-    /* Adjust post feed to make space for the reduced navbar */
+    /* Post Feed */
     .post-feed {
         padding: 20px;
-        margin-top: 180px;
+        margin-top: 180px; /* Adjust for smaller screens */
+    }
+
+    /* Post images */
+    .post-images img {
+        width: 100px;
+        height: 100px;
     }
 }
 
 /* Tablet Screen - Medium Devices (Max width: 1024px) */
 @media (max-width: 1024px) {
+    /* Navbar */
     .navbar {
-        padding: 15px;
+        flex-direction: row;
+        padding: 20px;
     }
 
+    /* Logo */
     .logo {
-        height: 70px; /* Slightly smaller logo on tablets */
+        height: 250px;
     }
 
+    /* Search bar */
     .search-container {
-        width: 70%; /* Adjust search bar size on tablets */
+        width: 70%;
     }
 
+    /* Adjust post feed layout */
     .post-feed {
         padding: 20px;
         margin-top: 200px;
