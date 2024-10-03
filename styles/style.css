@@ -9,6 +9,7 @@ body {
     background-color: #f9f9f9;
     margin: 0;
     padding: 0;
+    line-height: 1.5;
 }
 
 /* Global Styles */
@@ -25,17 +26,19 @@ html, body {
     align-items: center;
     height: 170px;
     background-color: #c2d3e6;
-    padding: 1px 50px;
+    padding: 1px 5vw; /* Use viewport width for padding */
     box-shadow: 0px 2px 4px rgba(247, 125, 125, 0.1);
     border-style: double;
     border-color: #333;
     border-radius: 8px;
     margin-bottom: 1px;
-    position: fixed; /* Fixes the navbar in place */
-    top: 0; /* Aligns it to the top of the page */
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    z-index: 1000; /* Ensures the navbar stays on top of other content */
+    z-index: 1000;
+    width: 100%; /* Ensures it spans the entire width */
+    max-width: 100vw; /* Prevent overflow */
 }
 
 /* Responsive Navbar for mobile */
@@ -51,12 +54,13 @@ html, body {
         flex-direction: row;
         gap: 10px;
         justify-content: space-between;
+        width: 100%;
     }
 }
 
-/* Additional rule to ensure content does not overlap with navbar */
+/* Ensuring content doesn't overlap with navbar */
 .post-feed {
-    margin-top: 220px; /* Add margin to prevent overlap with fixed navbar */
+    margin-top: 220px;
 }
 
 /* Logo Section */
@@ -66,14 +70,15 @@ html, body {
 }
 
 .logo {
-    height: 15vw; /* Use viewport width to make the logo size responsive */
+    height: 15vw; /* Responsive height */
     width: auto;   
+    max-height: 100px; /* Limit the maximum height */
 }
 
 /* Navbar Buttons */
 .nav-buttons {
     display: flex;
-    gap: 20px;
+    gap: 2vw; /* Use relative units for spacing */
     list-style: none;
 }
 
@@ -84,7 +89,7 @@ html, body {
     justify-content: center;
     background: none;
     border: none;
-    padding: 20px;
+    padding: 1.5vw; /* Make button size fluid */
     font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
@@ -93,20 +98,20 @@ html, body {
 }
 
 .nav-buttons li button:hover {
-    color: #333; 
-    transform: scale(1.05); 
+    color: #333;
+    transform: scale(1.05);
 }
 
 .nav-buttons li button i {
-    font-size: 2rem;
-    margin-bottom: 5px;
+    font-size: 2vw; /* Use responsive icon size */
+    margin-bottom: 0.5vw;
 }
 
 .nav-buttons li button span {
-    font-size: 1rem; 
+    font-size: 1rem;
 }
 
-/* Search Bar */
+/* Search bar */
 .search-container {
     display: flex;
     align-items: center;
@@ -115,7 +120,8 @@ html, body {
     border-radius: 30px;
     padding: 12px 30px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    width: 500px; /* Increased width for the search bar */
+    width: 40vw; /* Use relative width */
+    min-width: 200px; /* Ensure it doesn’t shrink too much */
 }
 
 @media (max-width: 768px) {
@@ -148,7 +154,7 @@ html, body {
     justify-content: center;
     background: none;
     border: none;
-    padding: 8px;
+    padding: 10px;
     font-size: 1.2rem;
     font-weight: 500;
     cursor: pointer;
@@ -157,12 +163,12 @@ html, body {
 }
 
 .nav-icons li button:hover {
-    color: #333; 
+    color: #333;
     transform: scale(1.05);
 }
 
 .nav-icons li button i {
-    font-size: 2rem;
+    font-size: 2vw;
     margin-bottom: 5px;
 }
 
@@ -258,19 +264,19 @@ footer {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
+    flex-wrap: wrap; /* Ensure images don't overflow on smaller screens */
 }
 
 .post-images img {
-    width: 150px;
-    height: 150px;
+    width: calc(33% - 10px); /* Adjust width to be responsive */
+    height: auto;
     object-fit: cover;
     border-radius: 5px;
 }
 
 @media (max-width: 768px) {
     .post-images img {
-        width: 100px;
-        height: 100px;
+        width: calc(50% - 10px); /* Adjust for smaller screens */
     }
 }
 
