@@ -15,7 +15,7 @@ body {
 html, body {
     height: 100%;
     font-size: 16px;
-    color: #333;
+    color: #ffffff;
 }
 
 /* Navbar */
@@ -23,41 +23,41 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 170px;
     background-color: #c2d3e6;
-    padding: 20px 50px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
+    padding: 1px 50px; 
+    box-shadow: 0px 2px 4px rgba(247, 125, 125, 0.1);
+    border-style: double;
+    border-color: #333;
+    border-radius: 8px;
+    margin-bottom: 1px;
+    position: fixed; /* Fixes the navbar in place */
+    top: 0; /* Aligns it to the top of the page */
     left: 0;
     right: 0;
-    z-index: 1000;
-    flex-wrap: wrap; /* Ensures navbar items adjust on smaller screens */
+    z-index: 1000; /* Ensures the navbar stays on top of other content */
 }
 
-/* Adjust margin for post-feed so content doesn't overlap with navbar */
+/* Additional rule to ensure content does not overlap with navbar */
 .post-feed {
-    margin-top: 220px;
+    margin-top: 220px; /* Add margin to prevent overlap with fixed navbar */
 }
 
 /* Logo Section */
 .logo-container {
     display: flex;
     align-items: center;
-    flex: 1;
 }
 
 .logo {
-    height: 100px;
-    width: auto;
+    height: 325px; 
+    width: auto;   
 }
 
-/* Nav Buttons */
 .nav-buttons {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     list-style: none;
-    flex: 2; /* Distributes space evenly between navbar sections */
-    justify-content: flex-end;
 }
 
 .nav-buttons li button {
@@ -65,46 +65,47 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: none;
+    background: none; /* No background */
     border: none;
-    font-size: 0.9rem;
+    padding: 1px; 
+    font-size: 0.9rem; /* Smaller font size */
     font-weight: 500;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
-    color: black;
+    color: black; 
 }
 
 .nav-buttons li button:hover {
-    color: #333;
-    transform: scale(1.05);
+    color: #333; /* Darker hover color */
+    transform: scale(1.05); /* Slight scale effect */
 }
 
 .nav-buttons li button i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
+    font-size: 1.3rem; /* Slightly smaller icon size */
+    margin-bottom: 3px;
 }
 
 .nav-buttons li button span {
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Slightly smaller label font */
 }
 
-/* Search Bar */
+/* Search bar */
 .search-container {
     display: flex;
     align-items: center;
     background-color: white;
     border: 2px solid #007BFF;
     border-radius: 30px;
-    padding: 10px 20px;
-    width: 400px;
+    padding: 8px 25px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    flex: 1; /* Distributes space */
+    width: 500px; /* Increased width for the search bar */
 }
 
 .search-container input {
     border: none;
     outline: none;
     font-size: 1rem;
+    padding: 0;
     width: 100%;
     color: #333;
 }
@@ -113,16 +114,14 @@ html, body {
     margin-left: 10px;
     color: #007BFF;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 /* Icons and Profile Section */
 .nav-icons {
     display: flex;
-    gap: 20px;
+    gap: 10px; /* Reduced gap to bring buttons closer */
     list-style: none;
-    flex: 1; /* Distributes space */
-    justify-content: flex-end;
 }
 
 .nav-icons li button {
@@ -130,37 +129,38 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: none;
+    background: none; /* No background */
     border: none;
-    font-size: 1rem;
+    padding: 8px; /* Reduced padding */
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
-    color: black;
+    color: black; /* Changed text color to black */
 }
 
 .nav-icons li button:hover {
-    color: #333;
+    color: #333; /* Darker hover color */
     transform: scale(1.05);
 }
 
 .nav-icons li button i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
+    font-size: 1.3rem; /* Slightly smaller icon */
+    margin-bottom: 3px;
 }
 
 .nav-icons li button span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 /* Profile Icon (VC) */
 .profile-icon {
     display: inline-block;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     background-color: red;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -170,14 +170,15 @@ html, body {
 
 /* Footer */
 footer {
-    margin-top: 20px;
+    margin-top: 1px;
     text-align: center;
     color: #777;
     font-size: 1rem;
 }
 
-/* Main Content */
+/* Main Content - Placeholder for actual content */
 .post-feed {
+    min-height: 200px;
     background-color: #35407a;
     padding: 30px;
     border-radius: 8px;
@@ -194,7 +195,7 @@ footer {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Post Header */
+/* Post Header: User Info */
 .post-header {
     display: flex;
     align-items: center;
@@ -206,27 +207,27 @@ footer {
 }
 
 .avatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-color: #ffcc00;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
 .user-info h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
 .user-info p {
     margin: 5px 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #333;
 }
 
@@ -253,7 +254,7 @@ footer {
     border-radius: 5px;
 }
 
-/* Post Actions */
+/* Post Actions with labels under the icons */
 .post-actions {
     display: flex;
     justify-content: space-between;
@@ -264,12 +265,12 @@ footer {
 
 .likes-comments, .other-actions {
     display: flex;
-    gap: 30px;
+    gap: 30px; /* Space between action buttons */
 }
 
 .action-btn {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stack icon and label vertically */
     align-items: center;
     justify-content: center;
     background: none;
@@ -283,23 +284,24 @@ footer {
 }
 
 .action-btn i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
+    font-size: 1.5rem; /* Larger icon size */
+    margin-bottom: 5px; /* Space between icon and label */
 }
 
 .action-btn .action-label {
-    font-size: 1rem;
-    margin-top: 3px;
-    color: #777;
+    font-size: 0.9rem; /* Smaller label below icon */
+    margin-top: 3px; /* Space between label and icon */
+    color: #777; /* Lighter color for labels */
 }
 
+/* Hover effect */
 .action-btn:hover {
     color: white;
     background-color: #007BFF;
     box-shadow: 0 3px 8px rgba(13, 77, 146, 0.3);
 }
 
-/* Adjust button hover colors */
+/* Adjusted button hover colors for individual actions */
 .action-btn.like-btn:hover {
     background-color: #28a745;
 }
@@ -335,73 +337,62 @@ footer {
     /* Navbar adjustments */
     .navbar {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         padding: 10px;
     }
 
     .logo {
-        height: 60px;
+        height: 50px; /* Logo gets smaller on mobile devices */
+    }
+
+    .nav-buttons li button {
+        font-size: 0.7rem; /* Reduce font size for button labels */
+    }
+
+    .nav-buttons li button i {
+        font-size: 1.2rem; /* Reduce icon size */
     }
 
     .search-container {
-        width: 100%;
-        margin-bottom: 10px;
+        width: 100%; /* Make search bar full width on mobile */
+        margin-top: 10px;
     }
 
-    /* Nav buttons */
-    .nav-buttons {
-        flex-direction: row;
-        gap: 10px;
-        justify-content: center;
-    }
-
+    /* Icons and Profile Section */
     .nav-icons {
-        justify-content: center;
-        gap: 10px;
+        gap: 10px; /* Reduce gap between icons */
+        justify-content: center; /* Center the profile, inbox, and chat icons */
     }
 
-    /* Post feed adjustments */
+    .profile-icon {
+        width: 40px; /* Smaller profile icon */
+        height: 40px;
+        font-size: 1rem; /* Smaller font size for profile initials */
+    }
+
+    /* Adjust post feed to make space for the reduced navbar */
     .post-feed {
         padding: 20px;
-        margin-top: 180px; /* Adjust for smaller screens */
-    }
-
-    /* Post images adjustments */
-    .post-images img {
-        width: 120px;
-        height: 120px;
-    }
-
-    /* Footer */
-    footer {
-        margin-top: 20px;
+        margin-top: 180px;
     }
 }
 
 /* Tablet Screen - Medium Devices (Max width: 1024px) */
 @media (max-width: 1024px) {
-    /* Navbar adjustments */
     .navbar {
         padding: 15px;
     }
 
     .logo {
-        height: 80px;
+        height: 70px; /* Slightly smaller logo on tablets */
     }
 
-    /* Search bar */
     .search-container {
-        width: 70%;
+        width: 70%; /* Adjust search bar size on tablets */
     }
 
-    /* Post feed */
     .post-feed {
         padding: 20px;
         margin-top: 200px;
-    }
-
-    .post-images img {
-        width: 130px;
-        height: 130px;
     }
 }
