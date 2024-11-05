@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat | Anonymous Recipe Sharing</title>
+    <title>Communities | Anonymous Recipe Sharing</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -17,7 +17,7 @@
 
             <ul class="nav-buttons">
                 <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
-                <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
+                <li><button class="active"><i class="fas fa-users"></i> <span>Communities</span></button></li>
                 <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
             </ul>
 
@@ -28,34 +28,55 @@
 
             <ul class="nav-icons">
                 <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
-                <li><button class="active" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
+                <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
                 <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
-            </ul>            
+            </ul>
         </nav>
     </header>
 
-    <!-- Chat Section -->
+    <!-- Communities Section -->
     <main class="communities-layout">
-        <!-- Chat Sidebar -->
+        <!-- Communities Sidebar -->
         <aside class="communities-sidebar">
-            <h2>Chats</h2>
+            <h2>Communities</h2>
             <ul class="communities-list">
-                <li onmouseover="openChat('User 1')">User 1</li>
-                <li onmouseover="openChat('User 2')">User 2</li>
-                <li onmouseover="openChat('User 3')">User 3</li>
-                <li onmouseover="openChat('User 4')">User 4</li>
-                <li onmouseover="openChat('User 5')">User 5</li>
+                <li>Vegan <span>1.7k Members</span> <button class="join-btn" onclick="joinCommunity('Vegan')">Join</button></li>
+                <li>AllMeat <span>12.2k Members</span> <button class="join-btn" onclick="joinCommunity('AllMeat')">Join</button></li>
+                <li>Weekend <span>6.2k Members</span> <button class="join-btn" onclick="joinCommunity('Weekend')">Join</button></li>
+                <li>Korean <span>1.7k Members</span> <button class="join-btn" onclick="joinCommunity('Korean')">Join</button></li>
+                <li>Adobo Lovers <span>26 Members</span> <button class="join-btn" onclick="joinCommunity('Adobo Lovers')">Join</button></li>
             </ul>
+
+            <!-- Create Community Section -->
+            <div class="create-community">
+                <h3>Create a Community</h3>
+                <form id="create-community-form">
+                    <input type="text" id="community-name" placeholder="Community Name" required>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+
+            <!-- Joined Communities Section -->
+            <div class="joined-communities">
+                <h3>Joined Communities</h3>
+                <ul id="joined-communities-list">
+                    <li onmouseover="openCommunityChat('Vegan')">Vegan</li>
+                    <li onmouseover="openCommunityChat('AllMeat')">AllMeat</li>
+                    <li onmouseover="openCommunityChat('Weekend')">Weekend</li>
+                    <li onmouseover="openCommunityChat('Korean')">Korean</li>
+                    <li onmouseover="openCommunityChat('Adobo Lovers')">Adobo Lovers</li>
+                </ul>
+            </div>
         </aside>
 
-        <!-- Chat Messages Section -->
+        <!-- Community Chat Section -->
         <section class="community-content" id="community-chat-section">
-            <h2 id="community-chat-title">Chat with User</h2>
+            <h2 id="community-chat-title">Community Chat</h2>
 
             <!-- Chat Messages -->
             <div class="chat-messages" id="chat-messages">
                 <div class="message">
-                    <strong>Welcome:</strong> Please hover over a user to start chatting.
+                    <strong>Welcome:</strong> Please select a community from your joined communities.
                 </div>
             </div>
 
@@ -75,23 +96,46 @@
         <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
     </footer>
 
-    <!-- JavaScript for handling chat and hover interactions -->
+    <!-- JavaScript for handling reactions and chat -->
     <script>
-        // Store selected user to chat with
-        let selectedUser = null;
+        // Store joined communities
+        let joinedCommunities = [];
 
-        // Function to open chat with a specific user
-        function openChat(userName) {
+        // Store reactions for messages in different communities
+        const communityReactions = {};
+
+        // Function to join a community
+        function joinCommunity(communityName) {
+            if (!joinedCommunities.includes(communityName)) {
+                joinedCommunities.push(communityName);
+                updateJoinedCommunities();
+            }
+        }
+
+        // Function to update the joined communities list
+        function updateJoinedCommunities() {
+            const joinedList = document.getElementById('joined-communities-list');
+            joinedList.innerHTML = ''; // Clear existing list
+
+            // Add each joined community to the list
+            joinedCommunities.forEach(community => {
+                const listItem = document.createElement('li');
+                listItem.textContent = community;
+                listItem.addEventListener('click', () => openCommunityChat(community));
+                joinedList.appendChild(listItem);
+            });
+        }
+
+        // Function to open a community chat
+        function openCommunityChat(communityName) {
             const chatTitle = document.getElementById('community-chat-title');
             const chatMessages = document.getElementById('chat-messages');
 
-            selectedUser = userName; // Store the selected user
-
             // Update chat title and clear previous messages
-            chatTitle.textContent = `Chat with ${userName}`;
+            chatTitle.textContent = `Community Chat - ${communityName}`;
             chatMessages.innerHTML = `
                 <div class="message">
-                    <strong>Welcome to your chat with ${userName}!</strong>
+                    <strong>Welcome to ${communityName} Chat!</strong>
                     <div class="reactions">
                         <span class="reaction"><i class="fas fa-thumbs-up reaction-icon" data-reaction="like"></i> <span class="reaction-count">0</span></span>
                         <span class="reaction"><i class="fas fa-thumbs-down reaction-icon" data-reaction="dislike"></i> <span class="reaction-count">0</span></span>
@@ -100,7 +144,7 @@
                     </div>
                 </div>`;
 
-            // Attach reactions to the new chat
+            // Attach reactions
             attachReactions(chatMessages);
         }
 
@@ -112,11 +156,14 @@
                     const reactionCount = this.nextElementSibling;
                     const currentCount = parseInt(reactionCount.textContent);
                     reactionCount.textContent = currentCount + 1; // Increment the count
+
+                    const messageId = this.closest('.message').getAttribute('data-message-id');
+                    console.log(`You reacted to message ${messageId} with ${reactionType}!`);
                 });
             });
         }
 
-        // Handle sending a new message
+        // Handle sending new message
         document.getElementById('send-message-btn').addEventListener('click', function() {
             const message = document.getElementById('chat-message').value;
             if (message.trim() === "") return; // Skip if message is empty

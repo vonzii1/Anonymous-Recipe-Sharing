@@ -21,18 +21,16 @@
 
             <!-- Navigation Buttons -->
             <ul class="nav-buttons">
-                <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button class="active" onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
                 <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
                 <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
             </ul>
 
-            <!-- Search Bar -->
             <div class="search-container">
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" onclick="window.location.href='search.html'">>
                 <i class="fas fa-times search-clear"></i>
             </div>
 
-            <!-- Inbox, Chat, and Profile as Buttons -->
             <ul class="nav-icons">
                 <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
                 <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
@@ -46,98 +44,117 @@
         <section class="post-feed">
             <h1>Latest Recipes</h1>
 
-            <!-- Example post 1 -->
-            <article class="post">
-                <div class="post-header">
-                    <div class="user-avatar">
-                        <div class="avatar">A1</div>
-                    </div>
-                    <div class="user-info">
-                        <h3>Anonymous One</h3>
-                        <p>Delicious Spaghetti Carbonara... <a href="#">see more...</a></p>
-                    </div>
-                </div>
+   <!-- Post 1: Delicious Spaghetti Carbonara -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A1</div>
+        </div>
+        <div class="user-info">
+            <h3>Delicious Spaghetti Carbonara</h3>
+            <p>Posted by <strong>Anonymous One</strong></p>
+            <p>A rich and creamy Italian pasta dish with crispy pancetta and egg.</p>
+        </div>
+    </div>
 
-                <div class="post-images">
-                    <img src="images/spaghetti.jpg" alt="Spaghetti Image">
-                    <img src="images/spaghetti2.jpg" alt="Spaghetti Image 2">
-                    <img src="images/spaghetti3.jpg" alt="Spaghetti Image 3">
-                </div>
+    <!-- Image Carousel -->
+    <div class="carousel-container">
+        <div class="carousel" id="carousel-0">
+            <img src="images/spaghetti.jpg" alt="Spaghetti Image 1" class="carousel-image">
+            <img src="images/spaghetti2.jpg" alt="Spaghetti Image 2" class="carousel-image">
+            <img src="images/spaghetti3.jpg" alt="Spaghetti Image 3" class="carousel-image">
+        </div>
+        <button class="prev" onclick="moveSlide(-1, 0)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1, 0)">&#10095;</button>
+    </div>
 
-                <div class="post-actions">
-                    <div class="likes-comments">
-                        <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 123k</button>
-                        <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 1k</button>
-                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 23.5k</button>
-                    </div>
-                    <div class="other-actions">
-                        <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
-                        <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
-                    </div>
-                </div>
-            </article>
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 123k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 1k</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 23.5k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
 
-            <!-- Example post 2 -->
-            <article class="post">
-                <div class="post-header">
-                    <div class="user-avatar">
-                        <div class="avatar">A2</div>
-                    </div>
-                    <div class="user-info">
-                        <h3>Anonymous Two</h3>
-                        <p>Ultimate Chocolate Chip Cookies... <a href="#">see more...</a></p>
-                    </div>
-                </div>
+<!-- Post 2: Ultimate Chocolate Chip Cookies -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A2</div>
+        </div>
+        <div class="user-info">
+            <h3>Ultimate Chocolate Chip Cookies</h3>
+            <p>Posted by <strong>Anonymous Two</strong></p>
+            <p>The perfect soft and chewy chocolate chip cookie with a crisp edge and gooey center.</p>
+        </div>
+    </div>
 
-                <div class="post-images">
-                    <img src="images/cookies.jpg" alt="Cookies Image">
-                    <img src="images/cookies2.jpg" alt="Cookies Image 2">
-                    <img src="images/cookies3.jpg" alt="Cookies Image 3">
-                </div>
+    <!-- Image Carousel for the Second Post -->
+    <div class="carousel-container">
+        <div class="carousel" id="carousel-1">
+            <img src="images/cookies.jpg" alt="Chocolate Chip Cookies Image 1" class="carousel-image">
+            <img src="images/cookies2.jpg" alt="Chocolate Chip Cookies Image 2" class="carousel-image">
+            <img src="images/cookies3.jpg" alt="Chocolate Chip Cookies Image 3" class="carousel-image">
+        </div>
+        <button class="prev" onclick="moveSlide(-1, 1)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1, 1)">&#10095;</button>
+    </div>
 
-                <div class="post-actions">
-                    <div class="likes-comments">
-                        <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 200k</button>
-                        <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 2k</button>
-                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 35k</button>
-                    </div>
-                    <div class="other-actions">
-                        <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
-                        <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
-                    </div>
-                </div>
-            </article>
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 150k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 3k</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 30k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
 
-            <!-- Example post 3 -->
-            <article class="post">
-                <div class="post-header">
-                    <div class="user-avatar">
-                        <div class="avatar">A3</div>
-                    </div>
-                    <div class="user-info">
-                        <h3>Anonymous Three</h3>
-                        <p>Homemade Sushi Rolls... <a href="#">see more...</a></p>
-                    </div>
-                </div>
+<!-- Post 3: Homemade Sushi Rolls -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A3</div>
+        </div>
+        <div class="user-info">
+            <h3>Homemade Sushi Rolls</h3>
+            <p>Posted by <strong>Anonymous Three</strong></p>
+            <p>Perfect sushi rolls made with fresh ingredients and rolled to perfection at home.</p>
+        </div>
+    </div>
 
-                <div class="post-images">
-                    <img src="images/sushi.jpg" alt="Sushi Image">
-                    <img src="images/sushi2.jpg" alt="Sushi Image 2">
-                    <img src="images/sushi3.jpg" alt="Sushi Image 3">
-                </div>
+    <!-- Image Carousel for the Third Post -->
+    <div class="carousel-container">
+        <div class="carousel" id="carousel-2">
+            <img src="images/sushi.jpg" alt="Sushi Roll Image 1" class="carousel-image">
+            <img src="images/sushi2.jpg" alt="Sushi Roll Image 2" class="carousel-image">
+            <img src="images/sushi3.jpg" alt="Sushi Roll Image 3" class="carousel-image">
+        </div>
+        <button class="prev" onclick="moveSlide(-1, 2)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1, 2)">&#10095;</button>
+    </div>
 
-                <div class="post-actions">
-                    <div class="likes-comments">
-                        <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 150k</button>
-                        <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 1.5k</button>
-                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 12k</button>
-                    </div>
-                    <div class="other-actions">
-                        <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
-                        <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
-                    </div>
-                </div>
-            </article>
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 200k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 500</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 45k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
+
         </section>
     </main>
 

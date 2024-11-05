@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Anonymous Recipe Sharing</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Recipe Sharing Logo" class="logo">
+            </div>
+
+            <ul class="nav-buttons">
+                <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
+                <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
+            </ul>
+
+            <div class="search-container">
+                <input type="text" placeholder="Search" onclick="window.location.href='search.html'">
+                <i class="fas fa-times search-clear"></i>
+            </div>
+
+            <ul class="nav-icons">
+                <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
+                <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
+                <li><button class="active"><span class="profile-icon">VC</span></button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Profile Section -->
+    <main class="post-feed">
+        <!-- Profile Picture and User Info Section -->
+        <section class="post">
+            <div class="profile-header">
+                <div class="profile-pic-container">
+                    <img src="images/profile-pic.jpg" alt="Profile Picture" class="profile-pic">
+                </div>
+                <div class="profile-info">
+                    <h3 class="profile-username">VC</h3>
+                    <p class="profile-joined">Joined in 2024</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- User Activity Section -->
+        <section class="profile-content">
+            <h2>Liked Recipes</h2>
+            <div class="liked-recipes">
+                <!-- Example of liked recipes -->
+                <div class="activity-item">
+                    <strong>You liked:</strong> <a href="index.html#post1" class="recipe-link"><em>Creamy Carbonara</em></a>
+                    <span class="activity-time">2 days ago</span>
+                    <img src="images/spaghetti.jpg" alt="Creamy Carbonara" class="recipe-thumbnail">
+                </div>
+
+                <div class="activity-item">
+                    <strong>You liked:</strong> <a href="index.html#post2" class="recipe-link"><em>Homemade Sushi</em></a>
+                    <span class="activity-time">3 days ago</span>
+                    <img src="images/sushi.jpg" alt="Homemade Sushi" class="recipe-thumbnail">
+                </div>
+
+                <div class="activity-item">
+                    <strong>You liked:</strong> <a href="index.html#post3" class="recipe-link"><em>Creamy Carbonara</em></a>
+                    <span class="activity-time">1 week ago</span>
+                    <img src="images/spaghetti2.jpg" alt="Creamy Carbonara" class="recipe-thumbnail">
+                </div>
+            </div>
+
+            <!-- User's Favorite Recipes -->
+            <h2>Favorite Recipes</h2>
+            <div class="favorites-list">
+                <div class="favorite-recipe">
+                    <a href="index.html#post4" class="recipe-link"><img src="images/spaghetti3.jpg" alt="Creamy Carbonara" class="recipe-thumbnail"> <span class="recipe-title">Creamy Carbonara</span></a>
+                </div>
+
+                <div class="favorite-recipe">
+                    <a href="index.html#post5" class="recipe-link"><img src="images/sushi2.jpg" alt="Homemade Sushi" class="recipe-thumbnail"> <span class="recipe-title">Homemade Sushi</span></a>
+                </div>
+
+                <div class="favorite-recipe">
+                    <a href="index.html#post6" class="recipe-link"><img src="images/sushi3.jpg" alt="Sushi Roll" class="recipe-thumbnail"> <span class="recipe-title">Sushi Roll</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
+    </footer>
+
+   
+</body>
+</html>
