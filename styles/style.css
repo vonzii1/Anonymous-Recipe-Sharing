@@ -1060,3 +1060,8 @@ footer {
 .nav-icons li button {
     transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and size */
 }
+
+.carousel-item img {
+    width: 100%; /* Ensures the image covers the width of the carousel */
+    height: auto; /* Maintains aspect ratio */
+}

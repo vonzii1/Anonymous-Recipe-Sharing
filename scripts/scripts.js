@@ -261,6 +261,23 @@ function attachReactions(chatMessages) {
         });
     });
 }
+document.addEventListener('DOMContentLoaded', function () {
+    const carousel = new bootstrap.Carousel(document.getElementById('carouselExample'), {
+        interval: false,
+        wrap: true
+    });
+
+    document.getElementById('carouselExample').addEventListener('click', function (event) {
+        const rect = this.getBoundingClientRect();
+        const x = event.clientX - rect.left; // Get x position within the element.
+
+        if (x < rect.width / 2) {
+            carousel.prev();
+        } else {
+            carousel.next();
+        }
+    });
+});
 
 });
 
