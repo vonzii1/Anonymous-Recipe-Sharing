@@ -1,0 +1,19 @@
+const express = require('express');
+const { upload, getFileUrl } = require('../s3');
+const router = express.Router();
+
+// Upload a file
+router.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  res.status(200).json({ fileUrl: req.file.location });
+});
+
+// Retrieve a file by ID
+router.get('/files/:id', (req, res) => {
+  const fileUrl = getFileUrl(req.params.id);
+  res.status(200).json({ fileUrl });
+});
+
+module.exports = router;
