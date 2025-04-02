@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Anonymous Recipe Sharing</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar navbar-expand-lg custom-navbar">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Recipe Sharing Logo" class="logo">
+            </div>
+            <ul class="nav-buttons">
+                <li><button class="active"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
+                <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Search" onclick="window.location.href='search.html'">
+                <i class="fas fa-times search-clear"></i>
+            </div>
+            <ul class="nav-icons">
+                <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
+                <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
+                <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Section: Latest Recipes -->
+    <main>
+        <section class="latest-recipes">
+            <h1>Latest Recipes</h1>
+            <div id="posts-container" class="container mt-4">
+                <!-- Recipes will be dynamically added here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const apiKey = 'd9e9ad16df8d4e959c8d5b35432f4592';
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.warn("❌ No token found. Redirecting to login page...");
+            window.location.href = 'login.html';
+        } else {
+            console.log("✅ Token found. User is logged in.");
+        }
+    });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRandomRecipes();
+            fetchSavedRecipes();
+        });
+
+        function fetchRandomRecipes() {
+            fetch(`https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=5`)
+                .then(response => response.json())
+                .then(data => {
+                    const postsContainer = document.getElementById('posts-container');
+                    data.recipes.forEach(recipe => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'card mb-3';
+                        postElement.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.title}</h5>
+                                <img src="${recipe.image}" alt="${recipe.title}" class="card-img-top">
+                                <button onclick="viewRecipe(${recipe.id})">View Recipe</button>
+                                <button onclick="saveRecipe('${recipe.title}', '${recipe.image}', '${recipe.instructions}')">Save Recipe</button>
+                            </div>
+                        `;
+                        postsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching recipes:', error));
+        }
+
+        function searchRecipes() {
+            const query = document.getElementById('search-query').value;
+            fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const postsContainer = document.getElementById('posts-container');
+                    postsContainer.innerHTML = ''; // Clear previous results
+                    data.results.forEach(recipe => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'card mb-3';
+                        postElement.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.title}</h5>
+                                <img src="${recipe.image}" alt="${recipe.title}" class="card-img-top">
+                                <button onclick="viewRecipe(${recipe.id})">View Recipe</button>
+                                <button onclick="saveRecipe('${recipe.title}', '${recipe.image}', '${recipe.instructions}')">Save Recipe</button>
+                            </div>
+                        `;
+                        postsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error searching recipes:', error));
+        }
+
+        function viewRecipe(recipeId) {
+            fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert(`Title: ${data.title}\nIngredients: ${data.extendedIngredients.map(ing => ing.original).join(', ')}\nInstructions: ${data.instructions}`);
+                })
+                .catch(error => console.error('Error fetching recipe details:', error));
+        }
+
+        function saveRecipe(title, image, instructions) {
+            fetch('http://localhost:5000/api/recipes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title,
+                    ingredients: [], // Add ingredients if available
+                    instructions,
+                    author_id: 'api' // Indicate that this is an API-sourced recipe
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Recipe saved successfully!');
+                location.reload();
+            })
+            .catch(error => console.error('Error saving recipe:', error));
+        }
+
+        function fetchUserInfo(token) {
+    fetch('http://localhost:5000/api/user-info', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.user) {
+            console.log("👤 Logged in as:", data.user.name);
+
+            const initials = data.user.name
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase();
+
+            const profileIcon = document.querySelector('.profile-icon');
+            if (profileIcon) {
+                profileIcon.innerText = initials;
+            }
+        }
+    })
+    .catch(err => {
+        console.error('❌ Error fetching user info:', err);
+    });
+}
+
+        function fetchSavedRecipes() {
+            fetch('http://localhost:5000/api/recipes')
+                .then(response => response.json())
+                .then(data => {
+                    const postsContainer = document.getElementById('posts-container');
+                    data.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'card mb-3';
+                        postElement.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${post.title}</h5>
+                                <p class="card-text"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+                                <p class="card-text"><strong>Instructions:</strong> ${post.instructions}</p>
+                                <button onclick="editRecipe('${post.recipe_id}')">Edit</button>
+                                <button onclick="deleteRecipe('${post.recipe_id}')">Delete</button>
+                                <div class="post-actions">
+                                    <div class="likes-comments">
+                                        <button class="action-btn like-btn" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i> Like</button>
+                                        <button class="action-btn dislike-btn" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i> Dislike</button>
+                                        <button class="action-btn comment-btn" onclick="commentRecipe('${post.recipe_id}')"><i class="fas fa-comment"></i> Comment</button>
+                                    </div>
+                                    <div class="other-actions">
+                                        <button class="action-btn favorite-btn" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Add to Favorite</button>
+                                        <button class="action-btn report-btn" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        postsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching recipes:', error));
+        }
+
+        function deleteRecipe(recipeId) {
+            fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error deleting recipe:', error));
+        }
+
+        function editRecipe(recipeId) {
+            const newTitle = prompt("Enter new title:");
+            const newIngredients = prompt("Enter new ingredients (comma separated):");
+            const newInstructions = prompt("Enter new instructions:");
+
+            if (newTitle && newIngredients && newInstructions) {
+                fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: newTitle,
+                        ingredients: newIngredients.split(','),
+                        instructions: newInstructions
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Recipe updated successfully!');
+                    location.reload();
+                })
+                .catch(error => console.error('Error updating recipe:', error));
+            } else {
+                alert('All fields are required!');
+            }
+        }
+
+        function likeRecipe(recipeId) {
+            fetch(`http://localhost:5000/api/recipes/${recipeId}/like`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Recipe liked successfully!');
+                location.reload();
+            })
+            .catch(error => console.error('Error liking recipe:', error));
+        }
+
+        function dislikeRecipe(recipeId) {
+            fetch(`http://localhost:5000/api/recipes/${recipeId}/dislike`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Recipe disliked successfully!');
+                location.reload();
+            })
+            .catch(error => console.error('Error disliking recipe:', error));
+        }
+
+        function commentRecipe(recipeId) {
+            const comment = prompt("Enter your comment:");
+            if (comment) {
+                fetch(`http://localhost:5000/api/recipes/${recipeId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comment })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Comment added successfully!');
+                    location.reload();
+                })
+                .catch(error => console.error('Error adding comment:', error));
+            } else {
+                alert('Comment cannot be empty!');
+            }
+        }
+
+        function favoriteRecipe(recipeId) {
+            fetch(`http://localhost:5000/api/recipes/${recipeId}/favorite`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Recipe added to favorites successfully!');
+                location.reload();
+            })
+            .catch(error => console.error('Error adding to favorites:', error));
+        }
+
+        function reportRecipe(recipeId) {
+            fetch(`http://localhost:5000/api/recipes/${recipeId}/report`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Recipe reported successfully!');
+                location.reload();
+            })
+            .catch(error => console.error('Error reporting recipe:', error));
+        }
+
+        if (!token) {
+    window.location.href = 'login.html';
+} else {
+    fetchUserInfo(token);
+}
+
+
+    </script>
+</body>
+</html>
