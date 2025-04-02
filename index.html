@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Sharing Platform</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar navbar-expand-lg custom-navbar">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Recipe Sharing Logo" class="logo">
+            </div>
+
+            <!-- Navigation Buttons -->
+            <ul class="nav-buttons">
+                <li><button class="active" onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
+                <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
+            </ul>
+
+            <div class="search-container">
+                <input type="text" placeholder="Search" onclick="window.location.href='search.html'">>
+                <i class="fas fa-times search-clear"></i>
+            </div>
+
+            <ul class="nav-icons">
+                <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
+                <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
+                <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Section: Post Feed -->
+    <main>
+        <section class="post-feed">
+            <h1>Latest Recipes</h1>
+
+   <!-- Post 1: Delicious Spaghetti Carbonara -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A1</div>
+        </div>
+        <div class="user-info">
+            <h3>Delicious Spaghetti Carbonara</h3>
+            <p>Posted by <strong>Anonymous One</strong></p>
+            <p>A rich and creamy Italian pasta dish with crispy pancetta and egg.</p>
+        </div>
+    </div>
+
+    <!-- Image Carousel -->
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="images/spaghetti.jpg" class="d-block w-100" alt="First slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/spaghetti2.jpg" class="d-block w-100" alt="Second slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/spaghetti3.jpg" class="d-block w-100" alt="Third slide description">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 123k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 1k</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 23.5k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
+
+<!-- Post 2: Ultimate Chocolate Chip Cookies -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A2</div>
+        </div>
+        <div class="user-info">
+            <h3>Ultimate Chocolate Chip Cookies</h3>
+            <p>Posted by <strong>Anonymous Two</strong></p>
+            <p>The perfect soft and chewy chocolate chip cookie with a crisp edge and gooey center.</p>
+        </div>
+    </div>
+
+    <!-- Image Carousel for the Second Post -->
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="images/cookies.jpg" class="d-block w-100" alt="First slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/cookies2.jpg" class="d-block w-100" alt="Second slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/cookies3.jpg" class="d-block w-100" alt="Third slide description">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 150k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 3k</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 30k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
+
+<!-- Post 3: Homemade Sushi Rolls -->
+<article class="post">
+    <div class="post-header">
+        <div class="user-avatar">
+            <div class="avatar">A3</div>
+        </div>
+        <div class="user-info">
+            <h3>Homemade Sushi Rolls</h3>
+            <p>Posted by <strong>Anonymous Three</strong></p>
+            <p>Perfect sushi rolls made with fresh ingredients and rolled to perfection at home.</p>
+        </div>
+    </div>
+
+    <!-- Image Carousel for the Third Post -->
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="images/sushi.jpg" class="d-block w-100" alt="First slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/sushi2.jpg" class="d-block w-100" alt="Second slide description">
+          </div>
+          <div class="carousel-item">
+            <img src="images/sushi3.jpg" class="d-block w-100" alt="Third slide description">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+    <div class="post-actions">
+        <div class="likes-comments">
+            <button class="action-btn like-btn"><i class="fas fa-thumbs-up"></i> 200k</button>
+            <button class="action-btn unlike-btn"><i class="fas fa-thumbs-down"></i> 500</button>
+            <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 45k</button>
+        </div>
+        <div class="other-actions">
+            <button class="action-btn favorite-btn"><i class="fas fa-heart"></i> Add to Favorite</button>
+            <button class="action-btn report-btn"><i class="fas fa-flag"></i> Report</button>
+        </div>
+    </div>
+</article>
+
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
