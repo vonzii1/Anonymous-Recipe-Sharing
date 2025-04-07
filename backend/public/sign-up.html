@@ -5,113 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Anonymous Recipe</title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            background-color: #35407a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .signup-card {
+            background-color: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+        .signup-card .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            height: auto;
+            width: auto;
+            max-width: 150px;
+        }
+        .signup-card h2 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+        .form-control, .btn-primary {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-control {
+            border: 1px solid #ccc;
+        }
+        .btn-primary {
+            background-color: #35407a;
+            border: none;
+            font-weight: bold;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2a3266;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .signup-link a {
+            color: #35407a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <!-- Logo Section -->
-    <div class="logo-container" style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
-        <img src="images/logo2.png" alt="Recipe Sharing Logo" class="logo" style="max-width: 200px; height: auto;">
-    </div>
-
-    <!-- Signup Container -->
-    <div class="signup-container" style="max-width: 400px; margin: 20px auto; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h1 style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #333;">Sign Up</h1>
-        <p style="font-family: 'Roboto', sans-serif; color: #666;">Create an account to start sharing your recipes.</p>
-
-        <!-- Signup Form -->
-        <form id="signup-form" style="margin-bottom: 20px;">
-            <div class="form-group" style="margin-bottom: 15px;">
-                <input type="text" id="username" class="form-control" placeholder="Username" required style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; font-family: 'Roboto', sans-serif;">
-            </div>
-            <div class="form-group" style="margin-bottom: 15px;">
-                <input type="email" id="email" class="form-control" placeholder="Email" required style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; font-family: 'Roboto', sans-serif;">
-            </div>
-            <div class="form-group" style="margin-bottom: 15px;">
-                <input type="password" id="password" class="form-control" placeholder="Password" required style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; font-family: 'Roboto', sans-serif;">
-            </div>
-            <div class="form-group" style="margin-bottom: 15px;">
-                <input type="password" id="confirm-password" class="form-control" placeholder="Confirm Password" required style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; font-family: 'Roboto', sans-serif;">
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 10px; border-radius: 5px; background-color: #4285F4; border: none; color: white; font-family: 'Roboto', sans-serif;">Sign Up</button>
+    <div class="signup-card">
+        <img src="images/logo2.png" alt="Anonymous Recipe Logo" class="logo">
+        <h2>Create Your Account</h2>
+        <form id="signup-form">
+            <input type="text" id="name" class="form-control" placeholder="Full Name" required>
+            <input type="email" id="email" class="form-control" placeholder="Email" required>
+            <input type="password" id="password" class="form-control" placeholder="Password" required>
+            <input type="password" id="confirm-password" class="form-control" placeholder="Confirm Password" required>
+            <div id="error-msg" class="error">Passwords do not match.</div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
-
-        <!-- Divider -->
-        <div style="display: flex; align-items: center; margin: 20px 0;">
-            <div style="flex: 1; height: 1px; background-color: #ddd;"></div>
-            <span style="margin: 0 10px; color: #888; font-family: 'Roboto', sans-serif;">OR</span>
-            <div style="flex: 1; height: 1px; background-color: #ddd;"></div>
+        <!-- Google Sign-Up Button -->
+<a href="http://localhost:5000/auth/google" class="google-login-btn" style="
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: white;
+border: 1px solid #ccc;
+border-radius: 8px;
+padding: 12px;
+font-size: 16px;
+font-weight: 500;
+color: #333;
+text-decoration: none;
+transition: all 0.3s ease;
+margin-bottom: 20px;
+">
+<img src="images/google-logo.png" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 10px;">
+Continue with Google
+</a>
+        <div class="signup-link">
+            Already have an account? <a href="login.html">Log in</a>
         </div>
-
-        <!-- Google OAuth Signup Button -->
-        <a href="http://localhost:5000/auth/google" class="google-login-btn" style="display: inline-flex; align-items: center; justify-content: center; background-color: #4285F4; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-family: 'Roboto', sans-serif;">
-            <img src="images/google-logo.png" alt="Google Logo" style="width: 20px; margin-right: 10px;">
-            <span>Sign up with Google</span>
-        </a>
-
-        <!-- Optional: Link to other pages -->
-        <p style="margin-top: 20px; font-family: 'Roboto', sans-serif; color: #666;">Already have an account? <a href="login.html" style="color: #4285F4;">Log in</a></p>
     </div>
-
-    <!-- Footer Section -->
-    <footer style="text-align: center; margin-top: 50px; padding: 20px; background-color: #f8f9fa; font-family: 'Roboto', sans-serif; color: #666;">
-        <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
-    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
+        const form = document.getElementById('signup-form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        const errorMsg = document.getElementById('error-msg');
 
-            if (token) {
-                // Save the token to localStorage
-                localStorage.setItem('token', token);
-
-                // Redirect to the home page or profile page
-                window.location.href = 'index.html'; // or profile.html
-            }
-
-            // Handle signup form submission
-            const signupForm = document.getElementById('signup-form');
-            signupForm.addEventListener('submit', (e) => {
+        form.addEventListener('submit', function(e) {
+            if (password.value !== confirmPassword.value) {
+                errorMsg.style.display = 'block';
                 e.preventDefault();
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
-
-                // Validate password match
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match.');
-                    return;
-                }
-
-                // Perform signup API call
-                fetch('http://localhost:5000/api/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, email, password }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.token) {
-                        localStorage.setItem('token', data.token);
-                        window.location.href = 'index.html'; // Redirect to home page
-                    } else {
-                        alert('Signup failed: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during signup:', error);
-                    alert('An error occurred during signup. Please try again.');
-                });
-            });
+            } else {
+                errorMsg.style.display = 'none';
+            }
         });
     </script>
 </body>

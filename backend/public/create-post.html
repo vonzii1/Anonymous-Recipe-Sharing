@@ -21,7 +21,8 @@
                 <img src="images/logo.png" alt="Recipe Sharing Logo" class="logo">
             </div>
             <ul class="nav-buttons">
-                <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button onclick="window.location.href='index.html?token=' + token">
+                    <i class="fas fa-home"></i> <span>Home</span></button></li>
                 <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
                 <li><button class="active"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
             </ul>
@@ -32,7 +33,13 @@
             <ul class="nav-icons">
                 <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
                 <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
-                <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
+                <li>
+                    <button onclick="window.location.href='profile.html'">
+                      <span class="profile-icon" id="profile-icon">
+                        <img id="profile-avatar" src="images/default-avatar.png" alt="User" class="profile-icon-img" />
+                      </span>
+                    </button>
+                  </li>
             </ul>
         </nav>
     </header>
@@ -68,6 +75,36 @@
     </footer>
 
     <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const profileIcon = document.getElementById('profile-icon');
+
+    if (!token || !profileIcon) return;
+
+    try {
+      const res = await fetch('/api/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      });
+      const data = await res.json();
+      const { picture, name } = data.user;
+
+      // Replace the profile icon content with user's image
+      const img = document.createElement('img');
+      img.src = picture;
+      img.alt = name;
+      img.className = 'profile-icon-img';
+      img.style.borderRadius = '50%';
+      img.style.width = '32px';
+      img.style.height = '32px';
+      profileIcon.innerHTML = ''; // Clear any existing initials
+      profileIcon.appendChild(img);
+    } catch (err) {
+      console.error('❌ Failed to load user avatar', err);
+    }
+  });
+        const token = localStorage.getItem('token');
+
         document.getElementById('create-post-form').addEventListener('submit', async (event) => {
         event.preventDefault();
 

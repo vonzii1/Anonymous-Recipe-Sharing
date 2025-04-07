@@ -1,3 +1,4 @@
+require('dotenv').config();
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -25,7 +26,7 @@ const logger = winston.createLogger({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.S3_BUCKET,
+    bucket: process.env.AWS_BUCKET_NAME,
     acl: 'public-read', // Make files publicly accessible
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
@@ -44,7 +45,7 @@ const s3Upload = (params) => {
 // Function to retrieve a file URL
 const getFileUrl = (key) => {
   const params = {
-    Bucket: process.env.S3_BUCKET,
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
     Expires: 60 * 5, // URL expires in 5 minutes
   };

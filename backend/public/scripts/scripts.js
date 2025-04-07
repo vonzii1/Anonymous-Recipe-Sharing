@@ -426,3 +426,38 @@ document.getElementById('search-ingredients-button').addEventListener('click', (
 
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+  
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+  
+    fetch("/api/recipes", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        const container = document.querySelector("#postsContainer");
+        container.innerHTML = "";
+        data.forEach(post => {
+          const div = document.createElement("div");
+          div.innerHTML = `
+            <div class="post">
+              <h2>${post.title}</h2>
+              <p><strong>Ingredients:</strong> ${post.ingredients.join(", ")}</p>
+              <p><strong>Instructions:</strong> ${post.instructions}</p>
+              <img src="${post.imageUrl}" width="200">
+            </div>`;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load posts", err);
+      });
+  });
+  

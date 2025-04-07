@@ -44,6 +44,8 @@ const logger = winston.createLogger({
     ],
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // ✅ Apply Middleware BEFORE defining routes
 app.use(helmet({
     contentSecurityPolicy: {
@@ -117,13 +119,14 @@ app.get('/auth/google', (req, res, next) => {
     next();
 }, passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
 
-app.get('/auth/google/callback', (req, res, next) => {
-    console.log("Google OAuth Callback Hit!");
-    next();
-}, passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    console.log("User:", req.user);
-    res.redirect(`http://localhost:5000/index.html?token=${req.user.token}`);
-});
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        const token = req.user.token;
+        // 👇 Redirect to your styled custom index.html with token in query
+        res.redirect(`/index.html?token=${token}`);
+    }
+);
 
 // ✅ Root Route
 app.get('/', (req, res) => {
@@ -176,6 +179,119 @@ app.options('/api/recipes', (req, res) => {
     res.header('Access-Control-Allow-Methods', 'POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.status(204).send();
+});
+
+// ✅ Route to communities.html
+app.post('/api/communities', authenticate, async (req, res) => {
+    const { name } = req.body;
+    try {
+        const exists = await Community.findOne({ name });
+        if (exists) return res.status(400).json({ error: 'Community already exists' });
+
+        const community = new Community({ name, members: [] });
+        await community.save();
+        res.status(201).json(community);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/communities/:name/join', authenticate, async (req, res) => {
+    const { name } = req.params;
+    try {
+        const community = await Community.findOne({ name });
+        if (!community) return res.status(404).json({ error: 'Community not found' });
+
+        if (!community.members.includes(req.user.id)) {
+            community.members.push(req.user.id);
+            await community.save();
+        }
+
+        res.json({ message: 'Joined community' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/communities/:name/leave', authenticate, async (req, res) => {
+    const { name } = req.params;
+    try {
+        const community = await Community.findOne({ name });
+        if (!community) return res.status(404).json({ error: 'Community not found' });
+
+        community.members = community.members.filter(memberId => memberId !== req.user.id);
+        await community.save();
+
+        res.json({ message: 'Left community' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/communities/joined', authenticate, async (req, res) => {
+    try {
+        const communities = await Community.find({ members: req.user.id });
+        res.json(communities);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ✅ Route to fetch user notifications
+app.get('/api/notifications', authenticate, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const notifications = await Notification.find({ userId }).sort({ createdAt: -1 });
+        res.json(notifications);
+    } catch (err) {
+        console.error("❌ Error fetching notifications:", err);
+        res.status(500).json({ error: "Failed to fetch notifications" });
+    }
+});
+
+// ✅ POST a chat message
+app.post('/api/chat', authenticate, async (req, res) => {
+    try {
+        const { from, to, text } = req.body;
+        const message = new ChatMessage({ from, to, text });
+        await message.save();
+        res.status(201).json(message);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ✅ GET messages between two users
+app.get('/api/chat/:from/:to', authenticate, async (req, res) => {
+    try {
+        const { from, to } = req.params;
+        const messages = await ChatMessage.find({
+            $or: [
+                { from, to },
+                { from: to, to: from }
+            ]
+        }).sort({ createdAt: 1 });
+        res.json(messages);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ✅ React to a message
+app.post('/api/chat/react/:id', authenticate, async (req, res) => {
+    try {
+        const message = await ChatMessage.findById(req.params.id);
+        if (!message) return res.status(404).json({ error: 'Message not found' });
+
+        const { reaction } = req.body;
+        message.reactions = message.reactions || {};
+        message.reactions[reaction] = (message.reactions[reaction] || 0) + 1;
+
+        await message.save();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // ✅ Route to create a recipe with an image
@@ -232,6 +348,106 @@ app.post('/api/recipes', upload.single('image'), [
     }
 });
 
+// ✅ Route to Homepage
+app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
+    try {
+      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+      if (!recipe.liked_by.includes(req.user.id)) {
+        recipe.likes++;
+        recipe.liked_by.push(req.user.id);
+        await recipe.save();
+      }
+      res.json({ message: "Liked!" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });  
+
+  app.post('/api/recipes/:id/dislike', authenticate, async (req, res) => {
+    try {
+      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+      recipe.dislikes = (recipe.dislikes || 0) + 1;
+      await recipe.save();
+      res.json({ message: "Disliked!" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+
+  app.post('/api/recipes/:id/comments', authenticate, async (req, res) => {
+    try {
+      const { comment } = req.body;
+      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+      recipe.comments.push({
+        comment_id: uuidv4(),
+        user_id: req.user.id,
+        content: comment,
+        date_posted: new Date()
+      });
+      await recipe.save();
+      res.json({ message: "Comment added!" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+
+  app.post('/api/recipes/:id/favorite', authenticate, async (req, res) => {
+    try {
+      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+      if (!recipe.favorited_by.includes(req.user.id)) {
+        recipe.favorited_by.push(req.user.id);
+        await recipe.save();
+      }
+      res.json({ message: "Favorited!" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });  
+
+app.post('/api/recipes/:id/report', authenticate, async (req, res) => {
+    try {
+        const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+        if (!recipe.reports) recipe.reports = [];
+        recipe.reports.push({ user: req.user.id, date: new Date() });
+        await recipe.save();
+        res.json({ message: 'Reported', recipe });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/liked-recipes', authenticate, async (req, res) => {
+    try {
+      const recipes = await Recipe.find({ liked_by: req.user.id });
+      res.json(recipes);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  app.get('/api/favorite-recipes', authenticate, async (req, res) => {
+    try {
+      const recipes = await Recipe.find({ favorited_by: req.user.id });
+      res.json(recipes);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  app.get('/api/recipes/:id/comments', async (req, res) => {
+    try {
+      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+      if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
+  
+      res.json(recipe.comments);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+
 // ✅ Route to fetch all recipes
 app.get('/api/recipes', async (req, res) => {
     try {
@@ -267,6 +483,15 @@ app.delete('/api/recipes/:id', authenticate, isAdmin, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// ✅ Logout route
+app.get('/logout', (req, res) => {
+    req.logout(() => {
+        req.session.destroy(); // Destroy session on logout
+        res.clearCookie('connect.sid'); // Clear session cookie
+        res.redirect('http://localhost:5000/login.html'); // Redirect to login page (or homepage)
+    });
 });
 
 // ✅ Route to upload a file (for users)

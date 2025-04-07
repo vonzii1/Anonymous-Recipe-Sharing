@@ -22,7 +22,8 @@
             </div>
 
             <ul class="nav-buttons">
-                <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Home</span></button></li>
+                <li><button onclick="window.location.href='index.html?token=' + token">
+                    <i class="fas fa-home"></i> <span>Home</span></button></li>
                 <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> <span>Communities</span></button></li>
                 <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> <span>Create Post</span></button></li>
             </ul>
@@ -35,7 +36,13 @@
             <ul class="nav-icons">
                 <li><button class="active" onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
                 <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
-                <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
+                <li>
+                    <button onclick="window.location.href='profile.html'">
+                      <span class="profile-icon" id="profile-icon">
+                        <img id="profile-avatar" src="images/default-avatar.png" alt="User" class="profile-icon-img" />
+                      </span>
+                    </button>
+                  </li>
             </ul>
             
 
@@ -44,17 +51,7 @@
 
     <!-- Inbox Section -->
     <main class="communities-layout">
-        <!-- Notifications Sidebar -->
-        <aside class="communities-sidebar">
-            <h2>Inbox</h2>
-            <ul class="communities-list">
-                <li>New Likes</li>
-                <li>New Comments</li>
-                <li>Favorites</li>
-                <li>Community Updates</li>
-            </ul>
-        </aside>
-
+       
         <!-- Notifications Section -->
         <section class="community-content" id="notifications-section">
             <h2 id="notification-title">Your Notifications</h2>
@@ -95,51 +92,85 @@
 
     <!-- JavaScript to simulate notification activity -->
     <script>
-        // Simulate receiving notifications dynamically
-        const notifications = [
-            { user: "User123", action: "liked", post: "How to Cook Pancit Canton", time: "5 minutes ago" },
-            { user: "ChefMia", action: "commented", post: "Best Adobo Recipe", time: "30 minutes ago" },
-            { user: "FoodieLover", action: "added to favorites", post: "Vegan Pasta", time: "1 hour ago" },
-            { user: "Admin", action: "posted an update", community: "Weekend Cooks", time: "2 hours ago" }
-        ];
+    document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const profileIcon = document.getElementById('profile-icon');
 
-        const notificationsList = document.getElementById('notifications-list');
+    if (!token || !profileIcon) return;
 
-        // Function to create a new notification element
-        function createNotificationElement(notification) {
-            const div = document.createElement('div');
-            div.classList.add('notification');
+    try {
+      const res = await fetch('/api/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      });
+      const data = await res.json();
+      const { picture, name } = data.user;
 
-            // Generate notification text based on action type
-            if (notification.action === 'liked') {
-                div.innerHTML = `<strong>${notification.user}</strong> liked your post "<em>${notification.post}</em>."
-                                <span class="time">${notification.time}</span>`;
-            } else if (notification.action === 'commented') {
-                div.innerHTML = `<strong>${notification.user}</strong> commented on your post "<em>${notification.post}</em>."
-                                <span class="time">${notification.time}</span>`;
-            } else if (notification.action === 'added to favorites') {
-                div.innerHTML = `<strong>${notification.user}</strong> added your post "<em>${notification.post}</em>" to their favorites.
-                                <span class="time">${notification.time}</span>`;
-            } else if (notification.action === 'posted an update') {
-                div.innerHTML = `<strong>${notification.user}</strong> posted an update in "<em>${notification.community}</em>" community.
-                                <span class="time">${notification.time}</span>`;
+      // Replace the profile icon content with user's image
+      const img = document.createElement('img');
+      img.src = picture;
+      img.alt = name;
+      img.className = 'profile-icon-img';
+      img.style.borderRadius = '50%';
+      img.style.width = '32px';
+      img.style.height = '32px';
+      profileIcon.innerHTML = ''; // Clear any existing initials
+      profileIcon.appendChild(img);
+    } catch (err) {
+      console.error('❌ Failed to load user avatar', err);
+    }
+  });
+        const token = localStorage.getItem('token');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const notificationsList = document.getElementById('notifications-list');
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                notificationsList.innerHTML = '<p class="text-danger">You must be logged in to see notifications.</p>';
+                return;
             }
-
-            return div;
-        }
-
-        // Append the notifications to the list
-        notifications.forEach(notification => {
-            const notificationElement = createNotificationElement(notification);
-            notificationsList.appendChild(notificationElement);
+    
+            try {
+                const response = await fetch('http://localhost:5000/api/notifications', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                if (!response.ok) throw new Error('Failed to fetch notifications');
+                const notifications = await response.json();
+    
+                if (notifications.length === 0) {
+                    notificationsList.innerHTML = '<p class="text-muted">No notifications yet.</p>';
+                    return;
+                }
+    
+                notifications.forEach(notification => {
+                    const div = document.createElement('div');
+                    div.classList.add('notification');
+                    div.style.cursor = 'pointer';
+    
+                    div.innerHTML = `
+                        <strong>${notification.user}</strong> ${notification.action} your post 
+                        "<em>${notification.postTitle}</em>."
+                        <span class="time">${notification.time}</span>
+                    `;
+    
+                    div.addEventListener('click', () => {
+                        // ✅ Redirect to the homepage and highlight the post
+                        window.location.href = `index.html?highlight=${notification.postId}&from=inbox`;
+                    });
+    
+                    notificationsList.appendChild(div);
+                });
+    
+            } catch (err) {
+                console.error('❌ Error loading notifications:', err);
+                notificationsList.innerHTML = '<p class="text-danger">Error loading notifications.</p>';
+            }
         });
     </script>
-
-     <!-- Footer Section -->
-     <footer>
-        <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
-    </footer>
-
 
     <script src="scripts.js"></script>
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>

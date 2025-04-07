@@ -22,7 +22,7 @@
             </div>
 
             <ul class="nav-buttons">
-                <li><button onclick="window.location.href='index.html'"><i class="fas fa-home"></i> Home</button></li>
+                <li><button onclick="window.location.href='index.html?token=' + token"><i class="fas fa-home"></i> Home</button></li>
                 <li><button onclick="window.location.href='communities.html'"><i class="fas fa-users"></i> Communities</button></li>
                 <li><button onclick="window.location.href='create-post.html'"><i class="fas fa-plus"></i> Create Post</button></li>
             </ul>
@@ -34,7 +34,13 @@
             <ul class="nav-icons">
                 <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> Inbox</button></li>
                 <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> Chat</button></li>
-                <li><button onclick="window.location.href='profile.html'"><span class="profile-icon">VC</span></button></li>
+                <li>
+                    <button onclick="window.location.href='profile.html'">
+                      <span class="profile-icon" id="profile-icon">
+                        <img id="profile-avatar" src="images/default-avatar.png" alt="User" class="profile-icon-img" />
+                      </span>
+                    </button>
+                  </li>
             </ul>
         </nav>
     </header>
@@ -48,7 +54,97 @@
     <footer>
         <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const profileIcon = document.getElementById('profile-icon');
+
+    if (!token || !profileIcon) return;
+
+    try {
+      const res = await fetch('/api/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      });
+      const data = await res.json();
+      const { picture, name } = data.user;
+
+      // Replace the profile icon content with user's image
+      const img = document.createElement('img');
+      img.src = picture;
+      img.alt = name;
+      img.className = 'profile-icon-img';
+      img.style.borderRadius = '50%';
+      img.style.width = '32px';
+      img.style.height = '32px';
+      profileIcon.innerHTML = ''; // Clear any existing initials
+      profileIcon.appendChild(img);
+    } catch (err) {
+      console.error('❌ Failed to load user avatar', err);
+    }
+        });
+
+    const token = localStorage.getItem('token');
+    
+    function searchRecipes() {
+            const query = document.getElementById('search-input').value.trim();
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (!query) {
+                resultsContainer.innerHTML = '<p>Please enter a search term.</p>';
+                return;
+            }
+
+            fetch(`http://localhost:5000/api/recipes`)
+                .then(response => response.json())
+                .then(data => {
+                    const filtered = data.filter(recipe => recipe.title.toLowerCase().includes(query.toLowerCase()));
+
+                    if (filtered.length === 0) {
+                        resultsContainer.innerHTML = '<p>No matching recipes found.</p>';
+                        return;
+                    }
+
+                    filtered.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'card mb-4';
+                        postElement.innerHTML = `
+                            <div class="card-header d-flex align-items-center">
+                                <span class="author-initials me-2">${post.author_id.slice(0, 2).toUpperCase()}</span>
+                                <strong class="me-2">Posted by ${post.author_id}</strong>
+                            </div>
+                            <div class="card-body">
+                                <img src="${post.imageUrl || 'images/fallback.jpg'}" class="card-img-top mb-3" alt="${post.title}">
+                                <h5 class="card-title">${post.title}</h5>
+                                <p class="card-text"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+                                <p class="card-text"><strong>Instructions:</strong> ${post.instructions}</p>
+                                <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <button class="btn btn-outline-primary"><i class="fas fa-thumbs-up"></i></button>
+                                        <button class="btn btn-outline-secondary"><i class="fas fa-thumbs-down"></i></button>
+                                        <button class="btn btn-outline-dark"><i class="fas fa-comment"></i></button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-danger"><i class="fas fa-heart"></i> Favorite</button>
+                                        <button class="btn btn-outline-warning"><i class="fas fa-flag"></i> Report</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        resultsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching recipes:', error);
+                    resultsContainer.innerHTML = '<p style="color:red;">Failed to fetch recipes. Try again later.</p>';
+                });
+        }
+    </script>
+
     <script src="scripts.js"></script>
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
+</body>
+</html>
+ 

@@ -1122,3 +1122,205 @@ footer {
     text-decoration: underline;
 }
 
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card-header {
+    background-color: #eef3fb;
+    color: #333;
+    padding: 12px 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Card body */
+.card-body {
+    background-color: #fff;
+    padding: 20px;
+  }
+
+    /* Author initials circle */
+.author-initials {
+    background-color: #0a23e1;
+    color: white;
+    font-weight: bold;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+  }
+
+    .post-actions .btn {
+        margin-right: 0.3rem;
+        font-size: 0.85rem;
+    }
+
+    .card-img-top {
+        border-radius: 6px;
+        object-fit: cover;
+        max-height: 250px;
+        width: 100%;
+    }
+    .card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+
+    h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .profile-icon-img {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+      }
+
+      .card-title {
+        color: #2c3e50;
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+      }
+      
+      .card-text {
+        font-size: 1rem;
+        color: #444;
+      }
+      
+      /* Recipe actions */
+      .post-actions .btn {
+        font-size: 0.9rem;
+        border-radius: 6px;
+        margin-right: 8px;
+      }
+      
+      .post-actions .btn i {
+        margin-right: 4px;
+      }
+      
+      /* Image preview */
+      .card-img-top {
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      /* Modern Post Card Design */
+.card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s ease-in-out;
+    overflow: hidden;
+    border: none;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Post Header – profile + name */
+  .card-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: transparent;
+    border-bottom: 1px solid #f0f2f5;
+  }
+  
+  .author-initials {
+    background-color: #1877f2;
+    color: white;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+  }
+  
+  .card-header strong {
+    font-size: 1rem;
+    color: #050505;
+  }
+  
+  /* Post Image */
+  .card-img-top {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 400px;
+  }
+  
+  /* Post Content */
+  .card-body {
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #050505;
+    margin-bottom: 8px;
+  }
+  
+  .card-text {
+    color: #1c1e21;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Post Actions */
+  .post-actions {
+    border-top: 1px solid #f0f2f5;
+    margin-top: 16px;
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .post-actions .btn {
+    background-color: #f0f2f5;
+    color: #050505;
+    border: none;
+    font-size: 0.95rem;
+    padding: 6px 14px;
+    border-radius: 999px; /* Pill shape */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .post-actions .btn i {
+    font-size: 1rem;
+  }
+  
+  .post-actions .btn:hover {
+    background-color: #e4e6eb;
+    color: #050505;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
