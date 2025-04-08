@@ -137,9 +137,8 @@
           </a>
           
           <script>
-            // Dynamically set the correct Google OAuth URL for localhost or production
-            const googleAuthUrl = `${window.location.origin}/auth/google`;
-            document.getElementById('google-login').setAttribute('href', googleAuthUrl);
+            const loginBtn = document.getElementById('google-login');
+            loginBtn.href = `${window.location.origin}/auth/google`;
           </script>
           
         <div class="signup-link">
