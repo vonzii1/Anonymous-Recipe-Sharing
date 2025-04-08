@@ -134,12 +134,14 @@
         <a id="google-login" href="#" class="google-login-btn">
             <img src="images/google-logo.png" alt="Google Logo">
             Continue with Google
-        </a>
-        
-        <script>
-          // Dynamically set the correct base URL
-          document.getElementById('google-login').href = `${window.location.origin}/auth/google`;
-        </script>
+          </a>
+          
+          <script>
+            // Dynamically set the correct Google OAuth URL for localhost or production
+            const googleAuthUrl = `${window.location.origin}/auth/google`;
+            document.getElementById('google-login').setAttribute('href', googleAuthUrl);
+          </script>
+          
         <div class="signup-link">
             Don't have an account? <a href="sign-up.html">Sign up</a>
         </div>
