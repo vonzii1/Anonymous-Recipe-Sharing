@@ -531,6 +531,7 @@ app.post('/upload', upload.single('file'), [
         console.error(error);
         res.status(500).send('Error uploading file');
     }
+    
 });
 
 // ✅ Route to fetch all users

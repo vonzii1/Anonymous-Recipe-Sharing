@@ -26,7 +26,7 @@ const logger = winston.createLogger({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.AWS_BUCKET_NAME,
+    bucket: process.env.S3_BUCKET,
     acl: 'public-read', // Make files publicly accessible
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
@@ -45,7 +45,7 @@ const s3Upload = (params) => {
 // Function to retrieve a file URL
 const getFileUrl = (key) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.S3_BUCKET,
     Key: key,
     Expires: 60 * 5, // URL expires in 5 minutes
   };
