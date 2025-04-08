@@ -123,8 +123,9 @@ app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
         const token = req.user.token;
-        // 👇 Redirect to your styled custom index.html with token in query
-        res.redirect(`/index.html?token=${token}`);
+        const redirectBase = process.env.FRONTEND_URL || 'http://localhost:5000';
+        res.redirect(`${redirectBase}/index.html?token=${token}`);
+
     }
 );
 
