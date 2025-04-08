@@ -85,7 +85,7 @@ app.use(passport.session()); // Add this line to use Passport with sessions
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
     passReqToCallback: true, // Pass the request object to the callback
     prompt: 'select_account' // Force Google to show the account selection screen
 }, (req, accessToken, refreshToken, profile, done) => {
