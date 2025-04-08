@@ -131,10 +131,15 @@
             <button type="submit" class="btn btn-primary">Log In</button>
         </form>
         <div class="divider"><span>OR</span></div>
-        <a href="https://anonymous-recipe-sharing.onrender.com/auth/google" class="google-login-btn">
-            <img src="images/google-logo.png" alt="Google Logo">
-            Continue with Google
-          </a>
+        <a href="https://accounts.google.com/o/oauth2/v2/auth?
+client_id=864686264775-1o0q9999p3bjmo91luigngctq8oh8k4v.apps.googleusercontent.com&
+redirect_uri=https://anonymous-recipe-sharing.onrender.com/auth/google/callback&
+response_type=code&
+scope=profile email&
+prompt=select_account" class="google-login-btn">
+Continue with Google
+</a>
+
           
         <div class="signup-link">
             Don't have an account? <a href="sign-up.html">Sign up</a>
