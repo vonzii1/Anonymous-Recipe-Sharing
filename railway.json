@@ -1,0 +1,9 @@
+{
+    "build": {
+      "env": "node",
+      "cmd": "cd backend && npm install"
+    },
+    "start": {
+      "cmd": "node backend/server.js"
+    }
+  }
