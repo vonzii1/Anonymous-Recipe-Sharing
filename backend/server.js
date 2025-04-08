@@ -63,7 +63,7 @@ app.use(helmet({
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(cors({
-    origin: ['http://127.0.0.1:5000', 'http://localhost:5000', 'http://localhost:5500'], // Add your frontend origin
+    origin: ['https://anonymous-recipe-sharing-production-1948.up.railway.app/auth/google/callback', 'http://localhost:5000', 'http://localhost:5500'], // Add your frontend origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow POST and OPTIONS
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
     credentials: true
