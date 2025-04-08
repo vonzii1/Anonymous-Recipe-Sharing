@@ -85,9 +85,11 @@ app.use(passport.session()); // Add this line to use Passport with sessions
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://anonymous-recipe-sharing.onrender.com/auth/google/callback',
-    passReqToCallback: true, // Pass the request object to the callback
-    prompt: 'select_account' // Force Google to show the account selection screen
+    callbackURL: process.env.NODE_ENV === 'production'
+        ? 'https://anonymous-recipe-sharing.onrender.com/auth/google/callback'
+        : 'http://localhost:5000/auth/google/callback',
+    passReqToCallback: true,
+    prompt: 'select_account'
 }, (req, accessToken, refreshToken, profile, done) => {
     // Include Google profile information in the token payload
     const tokenPayload = {
