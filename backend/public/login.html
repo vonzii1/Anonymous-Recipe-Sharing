@@ -131,13 +131,16 @@
             <button type="submit" class="btn btn-primary">Log In</button>
         </form>
         <div class="divider"><span>OR</span></div>
-        <a id="google-login" class="google-login-btn">
+        <a href="http://localhost:5000/auth/google" class="google-login-btn">
             <img src="images/google-logo.png" alt="Google Logo">
             Continue with Google
           </a>
+          
           <script>
-            document.getElementById('google-login').href = `${window.location.origin}/auth/google`;
+            document.getElementById('google-login').href =
+              `${window.location.origin}/auth/google`;
           </script>
+          
           
         <div class="signup-link">
             Don't have an account? <a href="sign-up.html">Sign up</a>
