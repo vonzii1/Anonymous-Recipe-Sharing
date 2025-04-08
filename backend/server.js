@@ -63,7 +63,7 @@ app.use(helmet({
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(cors({
-    origin: [ 'https://anonymous-recipe-sharing.onrender.com', 'http://localhost:5000', 'http://localhost:5500'], // Add your frontend origin
+    origin: ['http://127.0.0.1:5000', 'http://localhost:5000', 'http://localhost:5500'], // Add your frontend origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow POST and OPTIONS
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
     credentials: true
@@ -85,7 +85,7 @@ app.use(passport.session()); // Add this line to use Passport with sessions
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    callbackURL: '/auth/google/callback',
     passReqToCallback: true, // Pass the request object to the callback
     prompt: 'select_account' // Force Google to show the account selection screen
 }, (req, accessToken, refreshToken, profile, done) => {
@@ -490,7 +490,7 @@ app.get('/logout', (req, res) => {
     req.logout(() => {
         req.session.destroy(); // Destroy session on logout
         res.clearCookie('connect.sid'); // Clear session cookie
-        res.redirect('/login.html'); // Redirect to login page (or homepage)
+        res.redirect('http://localhost:5000/login.html'); // Redirect to login page (or homepage)
     });
 });
 
