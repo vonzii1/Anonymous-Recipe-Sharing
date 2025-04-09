@@ -194,10 +194,11 @@
                         <strong class="me-2">Posted by API</strong>
                     </div>
                     <div class="card-body">
-                        <img src="${image}" class="card-img-top mb-3" alt="${title}">
-                        <h5 class="card-title">${title}</h5>
-                        <p class="card-text">${instructions}</p>
-                        <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.title}" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">` : ''}
+                        <h5 class="card-title text-dark">${post.title}</h5>
+                        <p class="card-text text-dark"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+                        <p class="card-text text-dark"><strong>Instructions:</strong> ${post.instructions}</p>
+                                                <div class="post-actions d-flex justify-content-between align-items-center mt-3">
                             <div>
                                 <button class="btn btn-outline-primary"><i class="fas fa-thumbs-up"></i></button>
                                 <button class="btn btn-outline-secondary"><i class="fas fa-thumbs-down"></i></button>
@@ -230,15 +231,33 @@
                     postsContainer.innerHTML = ''; // Clear previous results
                     data.results.forEach(recipe => {
                         const postElement = document.createElement('div');
-                        postElement.className = 'card mb-3';
+                        postElement.className = 'card mb-4';
                         postElement.innerHTML = `
-                            <div class="card-body">
-                                <h5 class="card-title">${recipe.title}</h5>
-                                <img src="${recipe.image}" alt="${recipe.title}" class="card-img-top">
-                                <button onclick="viewRecipe(${recipe.id})">View Recipe</button>
-                                <button onclick="saveRecipe('${recipe.title}', '${recipe.image}', '${recipe.instructions}')">Save Recipe</button>
+                            <div class="card-header d-flex align-items-center">
+                                <span class="author-initials me-2">${post.author_id.slice(0, 2).toUpperCase()}</span>
+                                <strong class="me-2">Posted by ${post.author_id}</strong>
                             </div>
-                        `;
+                            <div class="card-body text-dark">
+                                ${post.imageUrl ? `<img src="${post.imageUrl}" class="img-fluid rounded mb-3" alt="${post.title}" style="max-height: 300px; object-fit: cover;">` : ''}
+                                <h5 class="card-title">${post.title}</h5>
+                                <p class="card-text"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+                                <p class="card-text"><strong>Instructions:</strong> ${post.instructions}</p>
+                                <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
+                                    <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
+                                    <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
+                                    <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
+                                    <button class="btn btn-outline-info" onclick="editRecipe('${post.recipe_id}')">Edit</button>
+                                    <button class="btn btn-outline-danger" onclick="deleteRecipe('${post.recipe_id}')">Delete</button>
+                                </div>
+                                </div>
+                                <div class="comment-section mt-3" id="comment-section-${post.recipe_id}" style="display: none;"></div>
+                            </div>
+                            `;
                         postsContainer.appendChild(postElement);
                     });
                 })
@@ -448,31 +467,29 @@ function fetchSavedRecipes() {
         }
 
         function fetchComments(recipeId) {
-        fetch(`/api/recipes/${recipeId}/comments`)
-            .then(res => res.json())
-            .then(comments => {
-            const list = document.getElementById(`comment-list-${recipeId}`);
-            list.innerHTML = '';
-            comments.forEach(comment => {
-                const div = document.createElement('div');
-                div.className = 'comment-item';
-                div.innerHTML = `
-                <div class="d-flex align-items-start mb-2">
+            fetch(`/api/recipes/${recipeId}/comments`)
+                .then(res => res.json())
+                .then(comments => {
+                const list = document.getElementById(`comment-list-${recipeId}`);
+                list.innerHTML = '';
+                comments.forEach(comment => {
+                    const div = document.createElement('div');
+                    div.className = 'd-flex align-items-start mb-2 text-dark'; // ✅ added text-dark here
+                    div.innerHTML = `
                     <div class="comment-avatar me-2">
-                    <img src="images/default-avatar.png" alt="user" class="rounded-circle" width="32" height="32">
+                        <img src="images/default-avatar.png" alt="user" class="rounded-circle" width="32" height="32">
                     </div>
                     <div>
-                    <strong>${comment.user_id}</strong><br>
-                    <span>${comment.content}</span><br>
-                    <small class="text-muted">${new Date(comment.date_posted).toLocaleString()}</small>
+                        <strong>${comment.user_id}</strong><br>
+                        <span>${comment.content}</span><br>
+                        <small class="text-muted">${new Date(comment.date_posted).toLocaleString()}</small>
                     </div>
-                </div>
-                `;
-                list.appendChild(div);
-            });
-            })
-            .catch(err => console.error('Error fetching comments:', err));
-        }
+                    `;
+                    list.appendChild(div);
+                });
+                })
+                .catch(err => console.error('Error fetching comments:', err));
+            }
 
         function submitComment(recipeId) {
         const input = document.getElementById(`comment-input-${recipeId}`);
