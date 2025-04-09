@@ -128,7 +128,7 @@
 
         try {
             console.log('🚀 Submitting form...');
-            const response = await fetch('http://127.0.0.1:5000/api/recipes', {
+            const response = await fetch('/api/recipes', {
                 method: 'POST',
                 body: formData // ✅ DO NOT set headers for FormData (browser sets it)
             });
