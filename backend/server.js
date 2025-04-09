@@ -383,8 +383,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
     }
   });  
 
-  location.reload()
-
   app.post('/api/recipes/:id/dislike', authenticate, async (req, res) => {
     try {
       const recipe = await Recipe.findOne({ recipe_id: req.params.id });
@@ -396,7 +394,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
     }
   });
 
-  location.reload()
 
   app.post('/api/recipes/:id/comments', authenticate, async (req, res) => {
     try {
@@ -422,7 +419,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   });
-  location.reload()
 
   app.post('/api/recipes/:id/favorite', authenticate, async (req, res) => {
     try {
@@ -443,7 +439,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   });  
-  location.reload()
 
     app.post('/api/recipes/:id/report', authenticate, async (req, res) => {
         try {
@@ -464,7 +459,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
             res.status(500).json({ error: err.message });
         }
     });
-    location.reload()
 
     app.get('/api/liked-recipes', authenticate, async (req, res) => {
         try {
@@ -521,7 +515,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
             res.status(500).json({ error: error.message });
         }
     });
-    location.reload()
 
     // ✅ Route to delete a recipe
     app.delete('/api/recipes/:id', authenticate, isAdmin, async (req, res) => {
@@ -533,7 +526,6 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
             res.status(500).json({ error: error.message });
         }
     });
-    location.reload()
 
     // ✅ Logout route
     app.get('/logout', (req, res) => {
