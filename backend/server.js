@@ -18,9 +18,22 @@ const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
+const Notification = require('./models/Notification'); 
+function createNotification({ userId, message, type, recipeId }) {
+    const notification = new Notification({
+      userId,
+      message,
+      type,
+      recipeId,
+      createdAt: new Date()
+    });
+    return notification.save();
+  }
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+
+
 
 if (!MONGO_URI) {
     console.error("❌ ERROR: MONGO_URI is missing in .env file!");
@@ -356,12 +369,21 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
         recipe.likes++;
         recipe.liked_by.push(req.user.id);
         await recipe.save();
+
+        await createNotification({
+            userId: recipe.author_id,
+            message: `${req.user.name} liked your recipe "${recipe.title}".`,
+            type: 'like',
+            recipeId: recipe.recipe_id
+          });
       }
       res.json({ message: "Liked!" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });  
+
+  location.reload()
 
   app.post('/api/recipes/:id/dislike', authenticate, async (req, res) => {
     try {
@@ -373,7 +395,8 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   });
-  
+
+  location.reload()
 
   app.post('/api/recipes/:id/comments', authenticate, async (req, res) => {
     try {
@@ -386,12 +409,20 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
         date_posted: new Date()
       });
       await recipe.save();
+
+      await createNotification({
+        userId: recipe.author_id,
+        message: `${req.user.name} commented on your recipe "${recipe.title}".`,
+        type: 'comment',
+        recipeId: recipe.recipe_id
+      });
+
       res.json({ message: "Comment added!" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
-  
+  location.reload()
 
   app.post('/api/recipes/:id/favorite', authenticate, async (req, res) => {
     try {
@@ -399,166 +430,195 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
       if (!recipe.favorited_by.includes(req.user.id)) {
         recipe.favorited_by.push(req.user.id);
         await recipe.save();
+
+        await createNotification({
+            userId: recipe.author_id,
+            message: `${req.user.name} favorited your recipe "${recipe.title}".`,
+            type: 'favorite',
+            recipeId: recipe.recipe_id
+          });
       }
       res.json({ message: "Favorited!" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });  
+  location.reload()
 
-app.post('/api/recipes/:id/report', authenticate, async (req, res) => {
-    try {
-        const recipe = await Recipe.findOne({ recipe_id: req.params.id });
-        if (!recipe.reports) recipe.reports = [];
-        recipe.reports.push({ user: req.user.id, date: new Date() });
-        await recipe.save();
-        res.json({ message: 'Reported', recipe });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+    app.post('/api/recipes/:id/report', authenticate, async (req, res) => {
+        try {
+            const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+            if (!recipe.reports) recipe.reports = [];
+            recipe.reports.push({ user: req.user.id, date: new Date() });
+            await recipe.save();
 
-app.get('/api/liked-recipes', authenticate, async (req, res) => {
-    try {
-      const recipes = await Recipe.find({ liked_by: req.user.id });
-      res.json(recipes);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-  
-  app.get('/api/favorite-recipes', authenticate, async (req, res) => {
-    try {
-      const recipes = await Recipe.find({ favorited_by: req.user.id });
-      res.json(recipes);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-  
-  app.get('/api/recipes/:id/comments', async (req, res) => {
-    try {
-      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
-      if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
-  
-      res.json(recipe.comments);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-  
+            await createNotification({
+                userId: recipe.author_id,
+                message: `${req.user.name} reported your recipe "${recipe.title}".`,
+                type: 'report',
+                recipeId: recipe.recipe_id
+            });
 
-// ✅ Route to fetch all recipes
-app.get('/api/recipes', async (req, res) => {
-    try {
-        const recipes = await Recipe.find(); 
-        res.json(recipes);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// ✅ Route to update a recipe
-app.put('/api/recipes/:id', authenticate, async (req, res) => {
-    try {
-        const { title, ingredients, instructions, author_id } = req.body;
-        const updatedRecipe = await Recipe.findOneAndUpdate(
-            { recipe_id: req.params.id },
-            { title, ingredients, instructions, author_id },
-            { new: true }
-        );
-        if (!updatedRecipe) return res.status(404).json({ message: 'Recipe not found' });
-        res.json(updatedRecipe);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// ✅ Route to delete a recipe
-app.delete('/api/recipes/:id', authenticate, isAdmin, async (req, res) => {
-    try {
-        const deletedRecipe = await Recipe.findOneAndDelete({ recipe_id: req.params.id });
-        if (!deletedRecipe) return res.status(404).json({ message: 'Recipe not found' });
-        res.json({ message: 'Recipe deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// ✅ Logout route
-app.get('/logout', (req, res) => {
-    req.logout(() => {
-        req.session.destroy(); // Destroy session on logout
-        res.clearCookie('connect.sid'); // Clear session cookie
-        res.redirect('http://localhost:5000/login.html'); // Redirect to login page (or homepage)
+            res.json({ message: 'Reported', recipe });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     });
-});
+    location.reload()
 
-// ✅ Route to upload a file (for users)
-app.post('/upload', upload.single('file'), [
-    body('name').notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Invalid email address'),
-], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    if (!req.file) return res.status(400).send('No file uploaded');
-
-    const { name, email } = req.body;
+    app.get('/api/liked-recipes', authenticate, async (req, res) => {
+        try {
+        const recipes = await Recipe.find({ liked_by: req.user.id });
+        res.json(recipes);
+        } catch (err) {
+        res.status(500).json({ error: err.message });
+        }
+    });
     
-    const params = {
-        Bucket: process.env.S3_BUCKET,
-        Key: req.file.originalname,
-        Body: req.file.buffer,
-        ContentType: req.file.mimetype,
+    app.get('/api/favorite-recipes', authenticate, async (req, res) => {
+        try {
+        const recipes = await Recipe.find({ favorited_by: req.user.id });
+        res.json(recipes);
+        } catch (err) {
+        res.status(500).json({ error: err.message });
+        }
+    });
+    
+    app.get('/api/recipes/:id/comments', async (req, res) => {
+        try {
+        const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+        if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
+    
+        res.json(recipe.comments);
+        } catch (err) {
+        res.status(500).json({ error: err.message });
+        }
+    });
+    
+
+    // ✅ Route to fetch all recipes
+    app.get('/api/recipes', async (req, res) => {
+        try {
+            const recipes = await Recipe.find(); 
+            res.json(recipes);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+
+    // ✅ Route to update a recipe
+    app.put('/api/recipes/:id', authenticate, async (req, res) => {
+        try {
+            const { title, ingredients, instructions, author_id } = req.body;
+            const updatedRecipe = await Recipe.findOneAndUpdate(
+                { recipe_id: req.params.id },
+                { title, ingredients, instructions, author_id },
+                { new: true }
+            );
+            if (!updatedRecipe) return res.status(404).json({ message: 'Recipe not found' });
+            res.json(updatedRecipe);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    location.reload()
+
+    // ✅ Route to delete a recipe
+    app.delete('/api/recipes/:id', authenticate, isAdmin, async (req, res) => {
+        try {
+            const deletedRecipe = await Recipe.findOneAndDelete({ recipe_id: req.params.id });
+            if (!deletedRecipe) return res.status(404).json({ message: 'Recipe not found' });
+            res.json({ message: 'Recipe deleted successfully' });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    location.reload()
+
+    // ✅ Logout route
+    app.get('/logout', (req, res) => {
+        req.logout(() => {
+            req.session.destroy(); // Destroy session on logout
+            res.clearCookie('connect.sid'); // Clear session cookie
+            res.redirect('http://localhost:5000/login.html'); // Redirect to login page (or homepage)
+        });
+    });
+
+    // ✅ Route to upload a file (for users)
+    app.post('/upload', upload.single('file'), [
+        body('name').notEmpty().withMessage('Name is required'),
+        body('email').isEmail().withMessage('Invalid email address'),
+    ], async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        if (!req.file) return res.status(400).send('No file uploaded');
+
+        const { name, email } = req.body;
+        
+        const params = {
+            Bucket: process.env.S3_BUCKET,
+            Key: req.file.originalname,
+            Body: req.file.buffer,
+            ContentType: req.file.mimetype,
+        };
+
+        try {
+            const data = await s3Upload(params);
+            const user = new User({
+                name,
+                email,
+                fileName: req.file.originalname,
+                fileUrl: data.Location,
+                contentType: req.file.mimetype,
+            });
+
+            await user.save();
+            res.status(200).send('File uploaded and metadata saved');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error uploading file');
+        }
+        
+    });
+
+    // ✅ Route to fetch all users
+    app.get('/api/users', authenticate, isAdmin, async (req, res) => {
+        try {
+            const users = await User.find();
+            res.status(200).json(users);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error retrieving users');
+        }
+    });
+
+    // ✅ Get user-created recipes
+    app.get('/api/created-recipes', authenticate, async (req, res) => {
+        try {
+        const recipes = await Recipe.find({ author_id: req.user.id });
+        res.json(recipes);
+        } catch (err) {
+        res.status(500).json({ error: err.message });
+        }
+    });
+
+    // ✅ Define error-handling middleware
+    const errorHandler = (err, req, res, next) => {
+        logger.error(err.stack); // Log the error
+        const statusCode = err.statusCode || 500;
+        const message = err.message || "Internal Server Error";
+        res.status(statusCode).json({ error: message });
     };
 
-    try {
-        const data = await s3Upload(params);
-        const user = new User({
-            name,
-            email,
-            fileName: req.file.originalname,
-            fileUrl: data.Location,
-            contentType: req.file.mimetype,
-        });
+    // ✅ Use error-handling middleware
+    app.use(errorHandler);
+    app.get('/api/user-info', authenticate, (req, res) => {
+        res.json({ user: req.user });
+    });
+    app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 
-        await user.save();
-        res.status(200).send('File uploaded and metadata saved');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error uploading file');
-    }
-    
-});
-
-// ✅ Route to fetch all users
-app.get('/api/users', authenticate, isAdmin, async (req, res) => {
-    try {
-        const users = await User.find();
-        res.status(200).json(users);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error retrieving users');
-    }
-});
-
-// ✅ Define error-handling middleware
-const errorHandler = (err, req, res, next) => {
-    logger.error(err.stack); // Log the error
-    const statusCode = err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-    res.status(statusCode).json({ error: message });
-};
-
-// ✅ Use error-handling middleware
-app.use(errorHandler);
-app.get('/api/user-info', authenticate, (req, res) => {
-    res.json({ user: req.user });
-});
-app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
-
-// ✅ Start the server
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+    // ✅ Start the server
+    app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

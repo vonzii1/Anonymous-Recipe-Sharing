@@ -249,7 +249,7 @@
         }
 
         function saveRecipe(title, image, instructions) {
-            fetch('http://localhost:5000/api/recipes', {
+            fetch('/api/recipes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -270,7 +270,7 @@
         }
 
         function fetchUserInfo(token) {
-    fetch('http://localhost:5000/api/user-info', {
+    fetch('/api/user-info', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -299,7 +299,7 @@
 }
 
 function fetchSavedRecipes() {
-    fetch('http://localhost:5000/api/recipes')
+    fetch('/api/recipes')
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
@@ -338,7 +338,7 @@ function fetchSavedRecipes() {
 
 
         function deleteRecipe(recipeId) {
-            fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+            fetch(`/api/recipes/${recipeId}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())
@@ -355,7 +355,7 @@ function fetchSavedRecipes() {
             const newInstructions = prompt("Enter new instructions:");
 
             if (newTitle && newIngredients && newInstructions) {
-                fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+                fetch(`/api/recipes/${recipeId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -378,7 +378,7 @@ function fetchSavedRecipes() {
         }
 
         function likeRecipe(recipeId) {
-            fetch(`http://localhost:5000/api/recipes/${recipeId}/like`, {
+            fetch(`/api/recipes/${recipeId}/like`, {
                 method: 'POST'
             })
             .then(response => response.json())
@@ -390,7 +390,7 @@ function fetchSavedRecipes() {
         }
 
         function dislikeRecipe(recipeId) {
-            fetch(`http://localhost:5000/api/recipes/${recipeId}/dislike`, {
+            fetch(`/api/recipes/${recipeId}/dislike`, {
                 method: 'POST'
             })
             .then(response => response.json())
@@ -404,7 +404,7 @@ function fetchSavedRecipes() {
         function commentRecipe(recipeId) {
             const comment = prompt("Enter your comment:");
             if (comment) {
-                fetch(`http://localhost:5000/api/recipes/${recipeId}/comments`, {
+                fetch(`/api/recipes/${recipeId}/comments`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -423,7 +423,7 @@ function fetchSavedRecipes() {
         }
 
         function favoriteRecipe(recipeId) {
-            fetch(`http://localhost:5000/api/recipes/${recipeId}/favorite`, {
+            fetch(`/api/recipes/${recipeId}/favorite`, {
                 method: 'POST'
             })
             .then(response => response.json())
@@ -435,7 +435,7 @@ function fetchSavedRecipes() {
         }
 
         function reportRecipe(recipeId) {
-            fetch(`http://localhost:5000/api/recipes/${recipeId}/report`, {
+            fetch(`/api/recipes/${recipeId}/report`, {
                 method: 'POST'
             })
             .then(response => response.json())
