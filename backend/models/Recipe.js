@@ -32,7 +32,10 @@ const RecipeSchema = new mongoose.Schema({
 
   // ⭐ Favorites
   favorited_by: [{ type: String }], // store user_id or email who favorited
-
+  favorites: {
+    type: [String], // Store user IDs
+    default: []
+  },
   // 📅 Timestamps
   date_created: { type: Date, default: Date.now }
 });

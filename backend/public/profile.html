@@ -9,38 +9,25 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    .activity-item,
-    .favorite-recipe {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    .activity-item, .favorite-recipe {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       padding: 16px;
-      max-width: 220px;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 16px;
+      background-color: #fff;
+      transition: transform 0.2s ease-in-out;
     }
-  
-    .activity-item:hover,
-    .favorite-recipe:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    .activity-item:hover, .favorite-recipe:hover {
+      transform: scale(1.02);
     }
-  
     .recipe-thumbnail {
-      width: 100%;
-      height: 130px;
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-top: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-  
     .recipe-title {
-      display: block;
-      margin-top: 10px;
       font-weight: 600;
-      font-size: 1rem;
-      color: #333;
+      margin-top: 10px;
     }
   
     .activity-time {
@@ -82,12 +69,12 @@
         <li><button onclick="window.location.href='inbox.html'"><i class="fas fa-inbox"></i> <span>Inbox</span></button></li>
         <li><button onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i> <span>Chat</span></button></li>
         <li>
-            <button onclick="window.location.href='profile.html'">
-              <span class="profile-icon" id="profile-icon">
-                <img id="profile-avatar" src="images/default-avatar.png" alt="User" class="profile-icon-img" />
-              </span>
-            </button>
-          </li>
+          <button onclick="window.location.href='profile.html'">
+            <span class="profile-icon" id="profile-icon">
+              <img id="profile-avatar" src="images/default-avatar.png" alt="User" class="profile-icon-img" />
+            </span>
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -130,6 +117,35 @@
   </footer>
 
   <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const profileIcon = document.getElementById('profile-icon');
+
+    if (!token || !profileIcon) return;
+
+    try {
+      const res = await fetch('/api/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      });
+      const data = await res.json();
+      const { picture, name } = data.user;
+
+      // Replace the profile icon content with user's image
+      const img = document.createElement('img');
+      img.src = picture;
+      img.alt = name;
+      img.className = 'profile-icon-img';
+      img.style.borderRadius = '50%';
+      img.style.width = '32px';
+      img.style.height = '32px';
+      profileIcon.innerHTML = ''; // Clear any existing initials
+      profileIcon.appendChild(img);
+    } catch (err) {
+      console.error('❌ Failed to load user avatar', err);
+    }
+  });
+
     const token = localStorage.getItem('token');
 
     if (!token) window.location.href = 'login.html';
@@ -174,7 +190,7 @@
         const div = document.createElement('div');
         div.className = 'activity-item';
         div.innerHTML = `
-          <strong>You liked:</strong> <a href="index.html#${r.recipe_id}" class="recipe-link"><em>${r.title}</em></a>
+          <strong>You liked:</strong> <a href="index.html?recipe=${r.recipe_id}" class="recipe-link"><em>${r.title}</em></a>
           <span class="activity-time">${new Date(r.date_created).toLocaleDateString()}</span>
           <img src="${r.imageUrl}" alt="${r.title}" class="recipe-thumbnail">
         `;
@@ -208,6 +224,33 @@
     });
   }
 
+    async function loadFavoriteRecipes() {
+    const container = document.getElementById('favorite-recipes');
+    const response = await fetch('/api/favorite-recipes', {
+      headers: { Authorization: `Bearer ${token}` },
+      credentials: 'include'
+    });
+    const favorites = await response.json();
+
+    document.getElementById('favorite-count').textContent = favorites.length;
+
+    if (!favorites.length) {
+      container.innerHTML = "<p class='text-muted'>You haven’t added any favorites yet.</p>";
+      return;
+    }
+
+    favorites.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'favorite-recipe';
+      div.innerHTML = `
+        <a href="index.html#${r.recipe_id}" class="recipe-link">
+          <img src="${r.imageUrl}" alt="${r.title}" class="recipe-thumbnail">
+          <span class="recipe-title">${r.title}</span>
+        </a>
+      `;
+      container.appendChild(div);
+    });
+  }
 
     function logout() {
       fetch('/logout', { method: 'GET', credentials: 'include' })

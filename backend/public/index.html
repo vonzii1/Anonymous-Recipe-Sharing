@@ -60,6 +60,8 @@
     <p>© Anonymous Recipe Sharing, Inc. 2024. We love our users!</p>
   </footer>
 
+  <script src="scripts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
@@ -103,11 +105,14 @@
         .then(data => {
             document.getElementById('profile-avatar').src = data.user.picture;
         });
-}
-  </script>
-    <script src="scripts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+
+        const recipeId = new URLSearchParams(window.location.search).get('recipe');
+        if (recipeId) {
+        scrollToRecipe(recipeId);
+        fetchComments(recipeId);
+        }
+    }
+
         const apiKey = 'd9e9ad16df8d4e959c8d5b35432f4592';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -321,8 +326,14 @@ function fetchSavedRecipes() {
                             <div>
                                 <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
                                 <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
-                                <button class="btn btn-outline-dark" onclick="commentRecipe('${post.recipe_id}')"><i class="fas fa-comment"></i></button>
-                            </div>
+                                <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>                            
+                            <div class="comment-section mt-3" id="comment-section-${post.recipe_id}">
+                                <div class="comment-list" id="comment-list-${post.recipe_id}"></div>
+                                <div class="comment-input d-flex mt-2">
+                                    <input type="text" class="form-control me-2" id="comment-input-${post.recipe_id}" placeholder="Write a comment..." />
+                                    <button class="btn btn-sm btn-primary" onclick="submitComment('${post.recipe_id}')">Post</button>
+                                </div>
+                                </div>
                             <div>
                                 <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
                                 <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
@@ -413,26 +424,79 @@ function fetchSavedRecipes() {
             .catch(error => console.error('Error disliking recipe:', error));
         }
 
-        function commentRecipe(recipeId) {
-            const comment = prompt("Enter your comment:");
-            if (comment) {
-                fetch(`/api/recipes/${recipeId}/comments`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        },
-                    body: JSON.stringify({ comment })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Comment added successfully!');
-                    location.reload();
-                })
-                .catch(error => console.error('Error adding comment:', error));
-            } else {
-                alert('Comment cannot be empty!');
-            }
+
+        function toggleComments(recipeId) {
+        const section = document.getElementById(`comment-section-${recipeId}`);
+        if (section.style.display === 'none' || !section.style.display) {
+            section.style.display = 'block';
+            fetchComments(recipeId);
+        } else {
+            section.style.display = 'none';
+        }
+        }
+
+        function fetchComments(recipeId) {
+        fetch(`/api/recipes/${recipeId}/comments`)
+            .then(res => res.json())
+            .then(comments => {
+            const list = document.getElementById(`comment-list-${recipeId}`);
+            list.innerHTML = '';
+            comments.forEach(comment => {
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `
+                <div class="d-flex align-items-start mb-2">
+                    <div class="comment-avatar me-2">
+                    <img src="images/default-avatar.png" alt="user" class="rounded-circle" width="32" height="32">
+                    </div>
+                    <div>
+                    <strong>${comment.user_id}</strong><br>
+                    <span>${comment.content}</span><br>
+                    <small class="text-muted">${new Date(comment.date_posted).toLocaleString()}</small>
+                    </div>
+                </div>
+                `;
+                list.appendChild(div);
+            });
+            })
+            .catch(err => console.error('Error fetching comments:', err));
+        }
+
+        function submitComment(recipeId) {
+        const input = document.getElementById(`comment-input-${recipeId}`);
+        const content = input.value.trim();
+        if (!content) return;
+
+        fetch(`/api/recipes/${recipeId}/comments`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ comment: content })
+        })
+        .then(res => res.json())
+        .then(() => {
+            input.value = '';
+            fetchComments(recipeId);
+        })
+        .catch(err => console.error('Error posting comment:', err));
+        }
+
+        function fetchComments(recipeId) {
+        fetch(`/api/recipes/${recipeId}/comments`)
+            .then(res => res.json())
+            .then(comments => {
+            const list = document.getElementById(`comment-list-${recipeId}`);
+            list.innerHTML = '';
+            comments.forEach(comment => {
+                const div = document.createElement('div');
+                div.className = 'mb-2';
+                div.innerHTML = `<strong>${comment.user_id}</strong>: ${comment.content} <span class="text-muted" style="font-size: 0.8rem;">(${new Date(comment.date_posted).toLocaleString()})</span>`;
+                list.appendChild(div);
+            });
+            })
+            .catch(err => console.error('Error loading comments:', err));
         }
 
         function favoriteRecipe(recipeId) {

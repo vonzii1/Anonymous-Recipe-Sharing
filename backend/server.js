@@ -423,22 +423,22 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
   app.post('/api/recipes/:id/favorite', authenticate, async (req, res) => {
     try {
       const recipe = await Recipe.findOne({ recipe_id: req.params.id });
-      if (!recipe.favorited_by.includes(req.user.id)) {
-        recipe.favorited_by.push(req.user.id);
-        await recipe.save();
 
-        await createNotification({
-            userId: recipe.author_id,
-            message: `${req.user.name} favorited your recipe "${recipe.title}".`,
-            type: 'favorite',
-            recipeId: recipe.recipe_id
-          });
+      if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
+  
+      const userId = req.user.id;
+  
+      if (!recipe.favorites.includes(userId)) {
+        recipe.favorites.push(userId);
+        await recipe.save();
       }
-      res.json({ message: "Favorited!" });
+  
+      res.json({ message: 'Favorited' });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
     }
-  });  
+  });
 
     app.post('/api/recipes/:id/report', authenticate, async (req, res) => {
         try {
@@ -470,13 +470,15 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
     });
     
     app.get('/api/favorite-recipes', authenticate, async (req, res) => {
+        const userId = req.user.id;
         try {
-        const recipes = await Recipe.find({ favorited_by: req.user.id });
-        res.json(recipes);
-        } catch (err) {
-        res.status(500).json({ error: err.message });
+          const favorites = await Recipe.find({ 'favorites': userId });
+          res.json(favorites);
+        } catch (error) {
+          console.error('❌ Error fetching favorites:', error);
+          res.status(500).json({ error: 'Failed to fetch favorite recipes' });
         }
-    });
+      });
     
     app.get('/api/recipes/:id/comments', async (req, res) => {
         try {
@@ -532,7 +534,7 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
         req.logout(() => {
             req.session.destroy(); // Destroy session on logout
             res.clearCookie('connect.sid'); // Clear session cookie
-            res.redirect('http://localhost:5000/login.html'); // Redirect to login page (or homepage)
+            res.redirect('/login.html'); // Redirect to login page (or homepage)
         });
     });
 
