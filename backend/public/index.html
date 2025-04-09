@@ -9,97 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<style>
-    .card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  padding: 16px;
-  background-color: white;
-  margin-bottom: 24px;
-}
-
-.card-header {
-  background-color: transparent;
-  border-bottom: none;
-  font-weight: bold;
-}
-
-.author-initials {
-  width: 40px;
-  height: 40px;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-body img {
-  border-radius: 8px;
-  max-height: 240px;
-  object-fit: cover;
-  width: 100%;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  margin: 12px 0 8px;
-  font-weight: 600;
-}
-
-.card-text {
-  font-size: 1rem;
-  color: #333;
-}
-
-.post-actions {
-  margin-top: 1rem;
-}
-
-.comment-section {
-  display: none;
-  padding-top: 10px;
-}
-
-.comment-list {
-  max-height: 150px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.comment-item {
-  border-bottom: 1px solid #eee;
-  padding: 4px 0;
-  font-size: 0.95rem;
-}
-</style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
-  }
-  .custom-navbar {
-    background-color: #35407a;
-  }
-  .logo-container {
-    flex-grow: 1;
-  }
-  .logo {
-    max-width: 150px;
-    height: auto;
-  }
-  .nav-buttons button, .nav-icons button {
-    color: white;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  .nav-buttons button.active {
-    background-color: #2a3266;
-  }
 <body>
   <!-- Header Section -->
   <header>
@@ -411,35 +320,40 @@ function fetchSavedRecipes() {
                 const postElement = document.createElement('div');
                 postElement.className = 'card mb-4';
                 postElement.innerHTML = `
-                    <div class="card-header d-flex align-items-center">
-                        <span class="author-initials me-2">${post.author_id.slice(0, 2).toUpperCase()}</span>
-                        <strong class="me-2">Posted by ${post.author_id}</strong>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">${post.title}</h5>
-                        <p class="card-text"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
-                        <p class="card-text"><strong>Instructions:</strong> ${post.instructions}</p>
+                    <div class="card mb-4 shadow-sm border-0">
+                        <div class="card-header d-flex align-items-center bg-light">
+                        <div class="author-initials bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 36px; height: 36px;">
+                            ${post.author_id.slice(0, 2).toUpperCase()}
+                        </div>
+                        <strong>Posted by ${post.author_id}</strong>
+                        </div>
+                        <div class="card-body">
+                        <h5 class="card-title text-dark">${post.title}</h5>
+                        <p class="card-text text-dark"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+                        <p class="card-text text-dark"><strong>Instructions:</strong> ${post.instructions}</p>
+
                         <div class="post-actions d-flex justify-content-between align-items-center mt-3">
                             <div>
-                                <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
-                                <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
-                                <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>                            
-                            <div class="comment-section mt-3" id="comment-section-${post.recipe_id}">
-                                <div class="comment-list" id="comment-list-${post.recipe_id}"></div>
-                                <div class="comment-input d-flex mt-2">
-                                    <input type="text" class="form-control me-2" id="comment-input-${post.recipe_id}" placeholder="Write a comment..." />
-                                    <button class="btn btn-sm btn-primary" onclick="submitComment('${post.recipe_id}')">Post</button>
-                                </div>
-                                </div>
+                            <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
+                            <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
+                            <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>
+                            </div>
                             <div>
-                                <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
-                                <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
-                                <button class="btn btn-outline-info" onclick="editRecipe('${post.recipe_id}')">Edit</button>
-                                <button class="btn btn-outline-danger" onclick="deleteRecipe('${post.recipe_id}')">Delete</button>
+                            <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
+                            <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
                             </div>
                         </div>
+
+                        <div class="comment-section mt-3" id="comment-section-${post.recipe_id}" style="display: none;">
+                            <div class="comment-list mb-2" id="comment-list-${post.recipe_id}"></div>
+                            <div class="comment-input d-flex">
+                            <input type="text" class="form-control me-2" id="comment-input-${post.recipe_id}" placeholder="Write a comment..." />
+                            <button class="btn btn-sm btn-primary" onclick="submitComment('${post.recipe_id}')">Post</button>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                `;
+                    `;
                 postsContainer.appendChild(postElement);
             });
         })
@@ -523,13 +437,14 @@ function fetchSavedRecipes() {
 
 
         function toggleComments(recipeId) {
-        const section = document.getElementById(`comment-section-${recipeId}`);
-        if (section.style.display === 'none' || !section.style.display) {
-            section.style.display = 'block';
-            fetchComments(recipeId);
-        } else {
-            section.style.display = 'none';
-        }
+            const section = document.getElementById(`comment-section-${recipeId}`);
+            if (!section) return;
+            if (section.style.display === 'none' || section.style.display === '') {
+                section.style.display = 'block';
+                fetchComments(recipeId);
+            } else {
+                section.style.display = 'none';
+            }
         }
 
         function fetchComments(recipeId) {
