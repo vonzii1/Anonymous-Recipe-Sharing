@@ -79,7 +79,9 @@
     const token = localStorage.getItem('token');
     const profileIcon = document.getElementById('profile-icon');
 
-    if (!token || !profileIcon) return;
+    if (!token || !profileIcon) {
+        window.location.href = 'login.html';
+    }
 
     try {
       const res = await fetch('/api/user-info', {
@@ -119,19 +121,17 @@
         }
 
         try {
-    const res = await fetch('/api/user-info', {
-        headers: { Authorization: `Bearer ${token}` },
-        credentials: 'include'
-    });
-    const user = await res.json();
-    formData.append('author_id', user.user.id);
-    } catch (err) {
-    console.error('❌ Failed to fetch user info:', err);
-    alert('User information missing. Please log in again.');
-    return;
-    }
-        // ✅ Append `author_id` manually (Replace with actual user ID)
-        formData.append('author_id', '12345');
+        const res = await fetch('/api/user-info', {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: 'include'
+        });
+        const user = await res.json();
+        formData.append('author_id', user.user.id);
+        } catch (err) {
+        console.error('❌ Failed to fetch user info:', err);
+        alert('User information missing. Please log in again.');
+        return;
+        }
 
         // Debugging: Log FormData contents
         for (const [key, value] of formData.entries()) {
