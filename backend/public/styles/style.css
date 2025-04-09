@@ -1347,3 +1347,8 @@ footer {
 .card-text {
   color: #000 !important;
 }
+
+.comment-list, 
+.comment-list * {
+  color: #000 !important;
+}
