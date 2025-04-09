@@ -1342,3 +1342,8 @@ footer {
     padding: 5px 0;
     border-bottom: 1px solid #eee;
   }
+
+  .card-title,
+.card-text {
+  color: #000 !important;
+}
