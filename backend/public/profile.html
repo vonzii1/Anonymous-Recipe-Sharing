@@ -11,26 +11,53 @@
   <style>
     .activity-item,
     .favorite-recipe {
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 8px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 16px;
+      max-width: 220px;
       text-align: center;
-      max-width: 200px;
-      background-color: #fff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
+  
+    .activity-item:hover,
+    .favorite-recipe:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+  
     .recipe-thumbnail {
-      width: 100px;
-      height: 100px;
+      width: 100%;
+      height: 130px;
       object-fit: cover;
-      margin-top: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
+      margin-top: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
+  
     .recipe-title {
       display: block;
-      margin-top: 5px;
-      font-weight: 500;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #333;
+    }
+  
+    .activity-time {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+  
+    .recipe-link {
+      text-decoration: none;
+      color: #007bff;
+    }
+  
+    .recipe-link:hover {
+      text-decoration: underline;
+      color: #0056b3;
     }
   </style>
 </head>
@@ -123,6 +150,7 @@
         loadLikedRecipes();
         loadFavoriteRecipes();
         loadCreatedRecipes();
+        
       } catch (err) {
         console.error('Failed to fetch user info', err);
       }
