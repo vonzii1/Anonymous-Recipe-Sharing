@@ -118,6 +118,18 @@
             return;
         }
 
+        try {
+    const res = await fetch('/api/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+    });
+    const user = await res.json();
+    formData.append('author_id', user.user.id);
+    } catch (err) {
+    console.error('❌ Failed to fetch user info:', err);
+    alert('User information missing. Please log in again.');
+    return;
+    }
         // ✅ Append `author_id` manually (Replace with actual user ID)
         formData.append('author_id', '12345');
 
@@ -144,7 +156,7 @@
             const result = await response.json();
             console.log('✅ Recipe Created:', result);
             alert('Recipe created successfully!');
-            window.location.href = 'index.html'; // Redirect to homepage
+            window.location.href = 'index.html?token=' + token; // Redirect to homepage
         } catch (error) {
             console.error('❌ Error creating recipe:', error);
             alert('Error creating recipe. Please check the console for details.');
