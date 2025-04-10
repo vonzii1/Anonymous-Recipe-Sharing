@@ -331,53 +331,49 @@
 }
 
 function fetchSavedRecipes() {
-    fetch('/api/recipes')
-        .then(response => response.json())
-        .then(data => {
-            const postsContainer = document.getElementById('posts-container');
-            data.forEach(post => {
-                const postElement = document.createElement('div');
-                postElement.className = 'card mb-4';
-                postElement.innerHTML = `
-                    <div class="card mb-4 shadow-sm border-0">
-                        <div class="card-header d-flex align-items-center bg-light">
-                        <div class="author-initials bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 36px; height: 36px;">
-                            ${post.author_id.slice(0, 2).toUpperCase()}
-                        </div>
-                        <strong>Posted by ${post.author_id}</strong>
-                        </div>
-                        <div class="card-body">
-                        <h5 class="card-title text-dark">${post.title}</h5>
-                        <p class="card-text text-dark"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
-                        <p class="card-text text-dark"><strong>Instructions:</strong> ${post.instructions}</p>
+  fetch('/api/recipes')
+    .then(response => response.json())
+    .then(data => {
+      const postsContainer = document.getElementById('posts-container');
+      postsContainer.innerHTML = ''; // Clear previous content
 
-                        <div class="post-actions d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                            <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
-                            <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
-                            <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>
-                            </div>
-                            <div>
-                            <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
-                            <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
-                            </div>
-                        </div>
+      data.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'card mb-4';
+        postElement.innerHTML = `
+          <div class="card-header d-flex align-items-center">
+            <span class="author-initials me-2">${post.author_id.slice(0, 2).toUpperCase()}</span>
+            <strong class="me-2">Posted by ${post.author_id}</strong>
+          </div>
+          <div class="card-body text-black">
+            ${post.imageUrl ? `<img src="${post.imageUrl}" class="card-img-top mb-3" alt="${post.title}" style="max-height: 300px; object-fit: cover;">` : ''}
+            <h5 class="card-title">${post.title}</h5>
+            <p class="card-text"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
+            <p class="card-text"><strong>Instructions:</strong> ${post.instructions}</p>
 
-                        <div class="comment-section mt-3" id="comment-section-${post.recipe_id}" style="display: none;">
-                            <div class="comment-list mb-2" id="comment-list-${post.recipe_id}"></div>
-                            <div class="comment-input d-flex">
-                            <input type="text" class="form-control me-2" id="comment-input-${post.recipe_id}" placeholder="Write a comment..." />
-                            <button class="btn btn-sm btn-primary" onclick="submitComment('${post.recipe_id}')">Post</button>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    `;
-                postsContainer.appendChild(postElement);
-            });
-        })
-        .catch(error => console.error('Error fetching saved recipes:', error));
+            <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+              <div>
+                <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-up"></i></button>
+                <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}')"><i class="fas fa-thumbs-down"></i></button>
+                <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')"><i class="fas fa-comment"></i></button>
+              </div>
+              <div>
+                <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}')"><i class="fas fa-heart"></i> Favorite</button>
+                <button class="btn btn-outline-warning" onclick="reportRecipe('${post.recipe_id}')"><i class="fas fa-flag"></i> Report</button>
+                <button class="btn btn-outline-info" onclick="editRecipe('${post.recipe_id}')">Edit</button>
+                <button class="btn btn-outline-danger" onclick="deleteRecipe('${post.recipe_id}')">Delete</button>
+              </div>
+            </div>
+
+            <div class="comment-section mt-3" id="comment-section-${post.recipe_id}" style="display: none;"></div>
+          </div>
+        `;
+        postsContainer.appendChild(postElement);
+      });
+    })
+    .catch(error => console.error('Error fetching saved recipes:', error));
 }
+
 
 
         function deleteRecipe(recipeId) {
