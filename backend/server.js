@@ -422,7 +422,7 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
 
   app.post('/api/recipes/:id/favorite', authenticate, async (req, res) => {
     try {
-      const recipe = await Recipe.findOne({ recipe_id: req.params.id });
+    const recipe = await Recipe.findOne({ recipe_id: req.params.id });
 
       if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
   
@@ -519,7 +519,7 @@ app.post('/api/recipes/:id/like', authenticate, async (req, res) => {
     });
 
     // ✅ Route to delete a recipe
-    app.delete('/api/recipes/:id', authenticate, isAdmin, async (req, res) => {
+    app.delete('/api/recipes/:id', authenticate, async (req, res) => {
         try {
             const deletedRecipe = await Recipe.findOneAndDelete({ recipe_id: req.params.id });
             if (!deletedRecipe) return res.status(404).json({ message: 'Recipe not found' });
