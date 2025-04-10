@@ -147,6 +147,10 @@
     .then(() => {
         input.value = '';
         fetchComments(recipeId); // ✅ Refresh the comment section
+
+        const commentCountSpan = document.getElementById(`comment-count-${recipeId}`);
+        let current = parseInt(commentCountSpan.textContent);
+        commentCountSpan.textContent = current + 1;
         
     })
     .catch(err => console.error('Error posting comment:', err));
@@ -198,18 +202,24 @@
                         <h5 class="card-title text-dark">${post.title}</h5>
                         <p class="card-text text-dark"><strong>Ingredients:</strong> ${post.ingredients.join(', ')}</p>
                         <p class="card-text text-dark"><strong>Instructions:</strong> ${post.instructions}</p>
-                                                <div class="post-actions d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <button class="btn btn-outline-primary"><i class="fas fa-thumbs-up"></i></button>
-                                <button class="btn btn-outline-secondary"><i class="fas fa-thumbs-down"></i></button>
-                                <button class="btn btn-outline-dark"><i class="fas fa-comment"></i></button>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-danger"><i class="fas fa-heart"></i> Favorite</button>
-                                <button class="btn btn-outline-warning"><i class="fas fa-flag"></i> Report</button>
-                            </div>
+                    <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <button class="btn btn-outline-primary" onclick="likeRecipe('${post.recipe_id}', this)">
+                            <i class="fas fa-thumbs-up"></i> <span class="like-count">${post.likes || 0}</span>
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="dislikeRecipe('${post.recipe_id}', this)">
+                            <i class="fas fa-thumbs-down"></i> <span class="dislike-count">${post.dislikes || 0}</span>
+                            </button>
+                            <button class="btn btn-outline-dark" onclick="toggleComments('${post.recipe_id}')">
+                            <i class="fas fa-comment"></i> <span class="comment-count">${post.comments?.length || 0}</span>
+                            </button>
                         </div>
-                    </div>
+                        <div>
+                            <button class="btn btn-outline-danger" onclick="favoriteRecipe('${post.recipe_id}', this)">
+                            <i class="fas fa-heart"></i> Favorite
+                            </button>
+                        </div>
+                        </div>
                 `;
                 postsContainer.appendChild(postElement);
             });
@@ -430,7 +440,7 @@
             }
         }
 
-        function likeRecipe(recipeId) {
+        function likeRecipe(recipeId, button) {
             fetch(`/api/recipes/${recipeId}/like`, {
                 method: 'POST',
                 headers: {
@@ -440,12 +450,16 @@
             .then(response => response.json())
             .then(data => {
                 alert('Recipe liked successfully!');
+                const countSpan = button.querySelector('.like-count');
+                let current = parseInt(countSpan.textContent);
+                countSpan.textContent = current + 1;
+                button.classList.add('active-like');
                 location.reload();
             })
             .catch(error => console.error('Error liking recipe:', error));
         }
 
-        function dislikeRecipe(recipeId) {
+        function dislikeRecipe(recipeId, button) {
             fetch(`/api/recipes/${recipeId}/dislike`, {
                 method: 'POST',
                  headers: {
@@ -455,6 +469,10 @@
             .then(response => response.json())
             .then(data => {
                 alert('Recipe disliked successfully!');
+                const countSpan = button.querySelector('.dislike-count');
+                let current = parseInt(countSpan.textContent);
+                countSpan.textContent = current + 1;
+                button.classList.add('active-dislike');
                 location.reload();
             })
             .catch(error => console.error('Error disliking recipe:', error));
@@ -534,7 +552,7 @@
             .catch(err => console.error('Error loading comments:', err));
         }
 
-        function favoriteRecipe(recipeId) {
+        function favoriteRecipe(recipeId, button) {
             fetch(`/api/recipes/${recipeId}/favorite`, {
                 method: 'POST',
                 headers: {
@@ -544,6 +562,10 @@
             .then(response => response.json())
             .then(data => {
                 alert('Recipe added to favorites successfully!');
+                const countSpan = button.querySelector('.favorite-count');
+                let current = parseInt(countSpan.textContent);
+                countSpan.textContent = current + 1;
+                button.classList.add('active-favorite');
                 location.reload();
             })
             .catch(error => console.error('Error adding to favorites:', error));
