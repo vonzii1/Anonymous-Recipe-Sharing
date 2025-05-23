@@ -127,13 +127,10 @@ passport.deserializeUser((user, done) => {
 });
 
 // ✅ Google OAuth Routes
-app.get('/auth/google',
-    passport.authenticate('google', {
-      scope: ['profile', 'email'],
-      prompt: 'select_account'
-    })
-  );
-  
+app.get('/auth/google', (req, res, next) => {
+    console.log("Google OAuth Login Hit!");
+    next();
+}, passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
 
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
