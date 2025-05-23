@@ -133,6 +133,7 @@ app.get('/auth/google',
       prompt: 'select_account'
     })
   );
+  
 
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
