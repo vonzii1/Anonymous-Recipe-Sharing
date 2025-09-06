@@ -76,18 +76,29 @@ app.use(helmet({
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(cors({
-    origin: ['http://127.0.0.1:5000', 'http://localhost:5000', 'http://localhost:5500'], // Add your frontend origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow POST and OPTIONS
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
-    credentials: true
+    origin: [
+        'https://anonymous-recipe-sharing.onrender.com',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    sameSite: 'none',
+    secure: true
 }));
 
 // ✅ Configure express-session middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a real secret key from environment variables
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true if using HTTPS
+    saveUninitialized: false,
+    cookie: { 
+        secure: true, // Force HTTPS
+        httpOnly: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 
 // ✅ Initialize Passport for Google OAuth
@@ -98,7 +109,7 @@ app.use(passport.session()); // Add this line to use Passport with sessions
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    callbackURL: 'https://anonymous-recipe-sharing.onrender.com/auth/google/callback',
     passReqToCallback: true, // Pass the request object to the callback
     prompt: 'select_account' // Force Google to show the account selection screen
 }, (req, accessToken, refreshToken, profile, done) => {
